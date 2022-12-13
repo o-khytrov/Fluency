@@ -9,6 +9,7 @@ public class MyBot : Bot
         BotRules = new List<BotRule>()
         {
             new((x) => true, () => $"{OneOf("Hello", "Hi", "Hey")}. {OneOf("talk", "speak", "say something")} to me")
+                { Keep = true }
         };
     }
 

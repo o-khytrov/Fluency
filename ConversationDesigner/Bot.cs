@@ -6,5 +6,5 @@ public class Bot
 
     public List<BotRule> BotRules { get; set; }
 
-    public string ChatCompleteMessage { get; set; }
+    public string ChatCompleteMessage { get; set; } = "Chat is completed";
 }
