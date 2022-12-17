@@ -1,4 +1,6 @@
-namespace ConversationDesigner;
+using Engine;
+
+namespace TravelBot;
 
 public class TravelBot : Bot
 {
@@ -7,6 +9,12 @@ public class TravelBot : Bot
 
     private string? _target;
     private string? _source;
+
+
+    private Concept _travel = new()
+    {
+        "journey", "trip", "ride"
+    };
 
     public TravelBot()
     {

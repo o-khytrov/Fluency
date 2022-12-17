@@ -1,11 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using ConversationDesigner;
+using Engine;
 
 Console.WriteLine("What is your name?");
 var username = Console.ReadLine();
 
-var bot = new TravelBot();
+var bot = new TravelBot.TravelBot();
 var engine = new ChatEngine();
 while (true)
 {

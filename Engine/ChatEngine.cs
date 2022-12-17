@@ -1,4 +1,4 @@
-namespace ConversationDesigner;
+namespace Engine;
 
 public class ChatEngine
 {

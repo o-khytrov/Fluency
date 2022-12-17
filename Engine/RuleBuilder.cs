@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace ConversationDesigner;
+namespace Engine;
 
 public class RuleBuilder
 {
@@ -79,6 +79,12 @@ public class RuleBuilder
     public RuleBuilder WithOutput(Func<string> outputRenderer)
     {
         _botRule.Output = outputRenderer;
+        return this;
+    }
+
+    public RuleBuilder WithTest(string input, string expectedResponse)
+    {
+        _botRule.Tests.Add(new RuleTest() { Input = input, ExpectedResponse = expectedResponse });
         return this;
     }
 }

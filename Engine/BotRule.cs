@@ -1,10 +1,11 @@
-namespace ConversationDesigner;
+namespace Engine;
 
 public class BotRule
 {
     public Func<string, bool> Condition { get; set; }
 
     public Func<string> Output { get; set; }
+    public List<RuleTest> Tests { get; set; } = new();
 
     public bool Keep { get; set; }
 
@@ -32,4 +33,10 @@ public class BotRule
 
         return string.Empty;
     }
+}
+
+public class RuleTest
+{
+    public string Input { get; set; } = string.Empty;
+    public string ExpectedResponse { get; set; } = string.Empty;
 }
