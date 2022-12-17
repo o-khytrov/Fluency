@@ -13,12 +13,6 @@ public class RuleBuilder
         _botRule.Condition = DefaultCondition;
     }
 
-    public RuleBuilder WithName(string name)
-    {
-        _botRule.Name = name;
-        return this;
-    }
-
     public RuleBuilder Keep(bool keep = true)
     {
         _botRule.Keep = keep;
@@ -42,7 +36,7 @@ public class RuleBuilder
         return this;
     }
 
-    public RuleBuilder WithPattern(string pattern)
+    public RuleBuilder WithRegexPattern(string pattern)
     {
         _botRule.Condition = (input) =>
         {
@@ -53,7 +47,17 @@ public class RuleBuilder
         return this;
     }
 
-    public RuleBuilder WithPattern(string pattern, Action<MatchCollection> action)
+    public RuleBuilder WithPattern(string pattern)
+    {
+        _botRule.Condition = (input) =>
+        {
+            var sentence = Tokenizer.Tokenize(input);
+            return PatternEngine.Match(sentence);
+        };
+        return this;
+    }
+
+    public RuleBuilder WithRegexPattern(string pattern, Action<MatchCollection> action)
     {
         _botRule.Condition = (input) =>
         {

@@ -2,8 +2,12 @@ namespace Engine;
 
 public class Tokenizer
 {
-    public List<string> Tokenize(string input)
+    public static List<Sentence> Tokenize(string input)
     {
-        return input.Split(' ').ToList();
+        var sentences = input.Split(new[] { '.', '?', '!', ';' });
+        return sentences.Select(x => new Sentence()
+        {
+            Words = x.Split(' ').Select(x => new Word() { Content = x }).ToList()
+        }).ToList();
     }
 }
