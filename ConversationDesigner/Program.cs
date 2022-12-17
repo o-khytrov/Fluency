@@ -5,7 +5,7 @@ using ConversationDesigner;
 Console.WriteLine("What is your name?");
 var username = Console.ReadLine();
 
-var bot = new MyBot();
+var bot = new TravelBot();
 var engine = new ChatEngine();
 while (true)
 {

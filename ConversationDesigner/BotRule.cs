@@ -2,24 +2,32 @@ namespace ConversationDesigner;
 
 public class BotRule
 {
-    private readonly Func<string, bool> _condition;
-    private readonly Func<string> _output;
+    public Func<string, bool> Condition { get; set; }
+
+    public Func<string> Output { get; set; }
 
     public bool Keep { get; set; }
 
     public bool Repeat { get; set; }
 
-    public BotRule(Func<string, bool> condition, Func<string> output)
+    public string Name { get; set; }
+
+    public BotRule()
     {
-        _condition = condition;
-        _output = output;
+    }
+
+    public BotRule(string name, Func<string, bool> condition, Func<string> output)
+    {
+        Name = name;
+        Condition = condition;
+        Output = output;
     }
 
     public string Execute(string input)
     {
-        if (_condition(input))
+        if (Condition(input))
         {
-            return _output();
+            return Output();
         }
 
         return string.Empty;
