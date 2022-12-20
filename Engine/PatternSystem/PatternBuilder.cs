@@ -36,18 +36,9 @@ public class PatternBuilder
         return this;
     }
 
-    public PatternBuilder Wildcard(int? tokens = null)
+    public PatternBuilder Wildcard(Action<string>? resultAction = null)
     {
-        _pattern.Elements.Add(new WildcardPatternElement
-        {
-            PatternElementType = PatternElementType.Wildcard
-        });
-        return this;
-    }
-
-    public PatternBuilder Wildcard(Action<PatternMatchingResult> resultAction)
-    {
-        _pattern.Elements.Add(new WildcardPatternElement
+        _pattern.Elements.Add(new WildcardPatternElement(resultAction)
         {
             PatternElementType = PatternElementType.Wildcard
         });

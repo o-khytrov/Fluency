@@ -7,6 +7,7 @@ public class RuleBuilder
 {
     private static readonly Func<string, bool> DefaultCondition = x => true;
     private readonly BotRule _botRule;
+    private static readonly PatternEngine PatternEngine = new PatternEngine();
 
     public RuleBuilder(BotRule botRule)
     {
@@ -53,6 +54,7 @@ public class RuleBuilder
         var builder = new PatternBuilder();
         patternBuilderAction.Invoke(builder);
         _botRule.Pattern = builder.Build();
+        _botRule.Condition = x => PatternEngine.Match(_botRule.Pattern, x).Match;
         return this;
     }
 

@@ -4,7 +4,12 @@ namespace Engine.PatternSystem.Elements;
 
 public class WildcardPatternElement : PatternElement
 {
-    public List<string>? Values { get; set; }
+    private readonly Action<string>? _action;
+
+    public WildcardPatternElement(Action<string>? action = null)
+    {
+        _action = action;
+    }
 
     public override bool Match(TokenCollection input, List<string> extracted)
     {
@@ -17,6 +22,7 @@ public class WildcardPatternElement : PatternElement
         if (!string.IsNullOrWhiteSpace(token))
         {
             extracted.Add(token);
+            _action?.Invoke(token);
             return true;
         }
 
