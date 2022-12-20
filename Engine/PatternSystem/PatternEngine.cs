@@ -14,15 +14,15 @@ public class PatternEngine
         var isMatch = true;
         foreach (var element in pattern.Elements)
         {
-            var matched = false;
-            while (!matched)
+            var currentRuleMatch = false;
+            while (!currentRuleMatch && tokenCollection.CanMoveNext())
             {
-                isMatch = element.Match(tokenCollection, extracted);
-                matched = isMatch;
+                currentRuleMatch = element.Match(tokenCollection, extracted);
             }
 
-            if (!matched)
+            if (!currentRuleMatch)
             {
+                isMatch = false;
                 break;
             }
         }

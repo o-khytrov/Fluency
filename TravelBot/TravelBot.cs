@@ -30,10 +30,10 @@ public class TravelBot : Bot
 
         Gambit("TARGET")
             .WithPattern(x =>
-                x.Word("I").Word("want").Phrase("to go to").Wildcard(w => _target = w))
+                x.Word("I", "we").Word("want").Phrase("to go to").Wildcard(w => _target = w))
             .WithOutput(() => $"Ok you want to go to {_target}");
 
-        Gambit()
+        Gambit("CONFIRMATION")
             .WithPattern(x => x.Word("What").Word("do").Word("I", "we").Word("want", "desire"))
             .When(x => _source is not null && _target is not null)
             .WithOutput(() => $"You want to go from {_source} to {_target}");

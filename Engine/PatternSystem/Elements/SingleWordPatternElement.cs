@@ -10,7 +10,7 @@ public class SingleWordPatternElement : PatternElement
 
     public override bool Match(TokenCollection input, List<string> extracted)
     {
-        if (input.MoveNext())
+        if (!input.MoveNext())
         {
             return false;
         }

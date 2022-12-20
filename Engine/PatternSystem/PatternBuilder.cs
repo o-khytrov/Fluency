@@ -1,4 +1,5 @@
 using Engine.PatternSystem.Elements;
+using Engine.Tokenization;
 
 namespace Engine.PatternSystem;
 
@@ -32,7 +33,8 @@ public class PatternBuilder
 
     public PatternBuilder Phrase(string phrase)
     {
-        _pattern.Elements.Add(new PhrasePatternElement { PatternElementType = PatternElementType.Word, Value = phrase });
+        var tokens = new TokenCollection(Tokenizer.TokenizeStrings(phrase));
+        _pattern.Elements.Add(new PhrasePatternElement(tokens) { PatternElementType = PatternElementType.Word });
         return this;
     }
 

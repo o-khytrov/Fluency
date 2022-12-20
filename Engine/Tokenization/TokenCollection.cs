@@ -16,13 +16,18 @@ public class TokenCollection : IEnumerator<string>
 
     public bool MoveNext()
     {
-        if (_current < _tokens.Length - 1)
+        if (CanMoveNext())
         {
             _current++;
             return true;
         }
 
         return false;
+    }
+
+    public bool CanMoveNext()
+    {
+        return _current < _tokens.Length - 1;
     }
 
     public void Reset()
