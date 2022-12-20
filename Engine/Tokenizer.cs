@@ -10,4 +10,9 @@ public class Tokenizer
             Words = x.Split(' ').Select(x => new Word() { Content = x }).ToList()
         }).ToList();
     }
+
+    public static string[] TokenizeStrings(string input)
+    {
+        return input.Split(new[] { ' ', '?', '!', ';' });
+    }
 }

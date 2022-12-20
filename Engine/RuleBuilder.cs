@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Engine.PatternSystem;
 
 namespace Engine;
 
@@ -47,13 +48,11 @@ public class RuleBuilder
         return this;
     }
 
-    public RuleBuilder WithPattern(string pattern)
+    public RuleBuilder WithPattern(Action<PatternBuilder> patternBuilderAction)
     {
-        _botRule.Condition = (input) =>
-        {
-            var sentence = Tokenizer.Tokenize(input);
-            return PatternEngine.Match(sentence);
-        };
+        var builder = new PatternBuilder();
+        patternBuilderAction.Invoke(builder);
+        _botRule.Pattern = builder.Build();
         return this;
     }
 

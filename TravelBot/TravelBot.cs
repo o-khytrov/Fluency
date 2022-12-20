@@ -24,13 +24,12 @@ public class TravelBot : Bot
             .Keep()
             .Repeat();
 
-        Gambit("SOURCE")
-            .When(x => string.IsNullOrEmpty(_source))
-            .WithRegexPattern(@"I am at (\w*)", x => { _source = x.First().Groups[1].Value; })
-            .WithOutput(() => $"Ok you are at {_source}");
+        Gambit("SOURCE_PATTERN").WithPattern(x =>
+                x.Word("I", "we").Word("am", "are").Word("at", "in").Wildcard(matchingResult => _source = matchingResult[0]))
+            .WithOutput(() => $"Ok you want to go to {_target}");
 
         Gambit("TARGET")
-            .WithRegexPattern(@"I want to go to (\w*)", x => { _target = x.First().Groups[1].Value; })
+            .WithPattern(x => x.Word("I").Word("want").Phrase("to go to").Wildcard(patternMatchingResult => _target = patternMatchingResult[0]))
             .WithOutput(() => $"Ok you want to go to {_target}");
 
         Gambit()

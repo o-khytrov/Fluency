@@ -1,8 +1,12 @@
+using Engine.PatternSystem;
+
 namespace Engine;
 
 public class BotRule
 {
     public Func<string, bool> Condition { get; set; }
+
+    public Pattern Pattern { get; set; }
 
     public Func<string> Output { get; set; }
     public List<RuleTest> Tests { get; set; } = new();
