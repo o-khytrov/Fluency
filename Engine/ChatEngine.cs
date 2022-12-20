@@ -1,3 +1,5 @@
+using Engine.Tokenization;
+
 namespace Engine;
 
 public class ChatEngine
@@ -18,7 +20,8 @@ public class ChatEngine
                 continue;
             }
 
-            var output = rule.Execute(input);
+            var tokenCollection = new TokenCollection(input);
+            var output = rule.Execute(tokenCollection);
             if (!string.IsNullOrWhiteSpace(output))
             {
                 Conversations[username].RuleShown.Add(rule);

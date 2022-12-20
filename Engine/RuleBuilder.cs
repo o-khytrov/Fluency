@@ -1,11 +1,12 @@
 using System.Text.RegularExpressions;
 using Engine.PatternSystem;
+using Engine.Tokenization;
 
 namespace Engine;
 
 public class RuleBuilder
 {
-    private static readonly Func<string, bool> DefaultCondition = x => true;
+    private static readonly Func<TokenCollection, bool> DefaultCondition = x => true;
     private readonly BotRule _botRule;
     private static readonly PatternEngine PatternEngine = new PatternEngine();
 
@@ -43,7 +44,7 @@ public class RuleBuilder
         _botRule.Condition = (input) =>
         {
             var regex = new Regex(pattern);
-            var matches = regex.Matches(input);
+            var matches = regex.Matches(input.RawInput);
             return matches.Count > 0;
         };
         return this;
@@ -63,7 +64,7 @@ public class RuleBuilder
         _botRule.Condition = (input) =>
         {
             var regex = new Regex(pattern);
-            var matches = regex.Matches(input);
+            var matches = regex.Matches(input.RawInput);
             var isMatch = matches.Count > 0;
             if (isMatch)
             {
@@ -75,9 +76,9 @@ public class RuleBuilder
         return this;
     }
 
-    public RuleBuilder When(Func<string, bool> condition)
+    public RuleBuilder When(Func<TokenCollection, bool> condition)
     {
-        this._botRule.Condition = condition;
+        _botRule.Condition = condition;
         return this;
     }
 

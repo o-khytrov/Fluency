@@ -5,19 +5,16 @@ namespace Engine.PatternSystem;
 
 public class PatternEngine
 {
-    public PatternMatchingResult Match(Pattern pattern, string input)
+    public PatternMatchingResult Match(Pattern pattern, TokenCollection input)
     {
-        var tokens = Tokenizer.TokenizeStrings(input);
-        var tokenCollection = new TokenCollection(tokens);
-
         var extracted = new List<string>();
         var isMatch = true;
         foreach (var element in pattern.Elements)
         {
             var currentRuleMatch = false;
-            while (!currentRuleMatch && tokenCollection.CanMoveNext())
+            while (!currentRuleMatch && input.CanMoveNext())
             {
-                currentRuleMatch = element.Match(tokenCollection, extracted);
+                currentRuleMatch = element.Match(input, extracted);
             }
 
             if (!currentRuleMatch)

@@ -8,10 +8,13 @@ public class TokenCollection : IEnumerator<string>
 
     private int _current;
 
-    public TokenCollection(string[] tokens)
+    public string RawInput { get; }
+
+    public TokenCollection(string rawInput)
     {
-        _tokens = tokens;
+        _tokens = Tokenizer.TokenizeStrings(rawInput);
         _current = -1;
+        RawInput = rawInput;
     }
 
     public bool MoveNext()

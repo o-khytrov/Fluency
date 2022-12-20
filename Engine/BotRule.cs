@@ -1,14 +1,16 @@
 using Engine.PatternSystem;
+using Engine.Tokenization;
 
 namespace Engine;
 
 public class BotRule
 {
-    public Func<string, bool> Condition { get; set; }
+    public Func<TokenCollection, bool> Condition { get; set; }
 
     public Pattern Pattern { get; set; }
 
     public Func<string> Output { get; set; }
+
     public List<RuleTest> Tests { get; set; } = new();
 
     public bool Keep { get; set; }
@@ -17,18 +19,7 @@ public class BotRule
 
     public string Name { get; set; }
 
-    public BotRule()
-    {
-    }
-
-    public BotRule(string name, Func<string, bool> condition, Func<string> output)
-    {
-        Name = name;
-        Condition = condition;
-        Output = output;
-    }
-
-    public string Execute(string input)
+    public string Execute(TokenCollection input)
     {
         if (Condition(input))
         {
@@ -42,5 +33,6 @@ public class BotRule
 public class RuleTest
 {
     public string Input { get; set; } = string.Empty;
+
     public string ExpectedResponse { get; set; } = string.Empty;
 }

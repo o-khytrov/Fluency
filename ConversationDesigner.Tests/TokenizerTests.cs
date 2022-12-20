@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Engine;
 using Engine.PatternSystem;
+using Engine.Tokenization;
 using Xunit;
 
 namespace ConversationDesigner.Tests;
@@ -15,7 +16,7 @@ public class TokenizerTests
         var patternBuilder = new PatternBuilder();
         patternBuilder.Word("I", "we").Word("am", "are").Word("at", "in").Wildcard();
         var patternEngine = new PatternEngine();
-        var result = patternEngine.Match(patternBuilder.Build(), input);
+        var result = patternEngine.Match(patternBuilder.Build(), new TokenCollection(input));
         Assert.True(result.Match);
 
         Assert.Equal(extractedVariable, result[0]);
