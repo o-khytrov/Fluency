@@ -5,7 +5,7 @@ namespace Engine.PatternSystem;
 
 public class PatternEngine
 {
-    public PatternMatchingResult Match(Pattern pattern, TokenCollection input)
+    public PatternMatchingResult Match(Pattern pattern, BotInput input)
     {
         var extracted = new List<string>();
         var isMatch = true;

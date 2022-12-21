@@ -4,18 +4,18 @@ namespace Engine.PatternSystem.Elements;
 
 public class PhrasePatternElement : PatternElement
 {
-    private TokenCollection _value;
+    private BotInput _value;
 
     private readonly StringComparison _stringComparison;
 
-    public PhrasePatternElement(TokenCollection value, StringComparison? stringComparison = null)
+    public PhrasePatternElement(BotInput value, StringComparison? stringComparison = null)
     {
         _value = value;
         _stringComparison = stringComparison ?? StringComparison.OrdinalIgnoreCase;
     }
 
 
-    public override bool Match(TokenCollection input, List<string> extracted)
+    public override bool Match(BotInput input, List<string> extracted)
     {
         _value.Reset();
 

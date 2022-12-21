@@ -33,7 +33,7 @@ public class PatternBuilder
 
     public PatternBuilder Phrase(string phrase)
     {
-        var tokens = new TokenCollection(phrase);
+        var tokens = new BotInput(phrase);
         _pattern.Elements.Add(new PhrasePatternElement(tokens) { PatternElementType = PatternElementType.Word });
         return this;
     }

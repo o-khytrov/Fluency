@@ -6,14 +6,13 @@ namespace Engine;
 
 public class RuleBuilder
 {
-    private static readonly Func<TokenCollection, bool> DefaultCondition = x => true;
+    private static readonly Func<BotInput, bool> DefaultCondition = x => true;
     private readonly BotRule _botRule;
     private static readonly PatternEngine PatternEngine = new PatternEngine();
 
     public RuleBuilder(BotRule botRule)
     {
         _botRule = botRule;
-        _botRule.Condition = DefaultCondition;
     }
 
     public RuleBuilder Keep(bool keep = true)
@@ -41,12 +40,12 @@ public class RuleBuilder
 
     public RuleBuilder WithRegexPattern(string pattern)
     {
-        _botRule.Condition = (input) =>
+        _botRule.Conditions.Add((input) =>
         {
             var regex = new Regex(pattern);
             var matches = regex.Matches(input.RawInput);
             return matches.Count > 0;
-        };
+        });
         return this;
     }
 
@@ -55,13 +54,13 @@ public class RuleBuilder
         var builder = new PatternBuilder();
         patternBuilderAction.Invoke(builder);
         _botRule.Pattern = builder.Build();
-        _botRule.Condition = x => PatternEngine.Match(_botRule.Pattern, x).Match;
+        _botRule.Conditions.Add(x => PatternEngine.Match(_botRule.Pattern, x).Match);
         return this;
     }
 
     public RuleBuilder WithRegexPattern(string pattern, Action<MatchCollection> action)
     {
-        _botRule.Condition = (input) =>
+        _botRule.Conditions.Add((input) =>
         {
             var regex = new Regex(pattern);
             var matches = regex.Matches(input.RawInput);
@@ -72,13 +71,13 @@ public class RuleBuilder
             }
 
             return isMatch;
-        };
+        });
         return this;
     }
 
-    public RuleBuilder When(Func<TokenCollection, bool> condition)
+    public RuleBuilder When(Func<BotInput, bool> condition)
     {
-        _botRule.Condition = condition;
+        _botRule.Conditions.Add(condition);
         return this;
     }
 

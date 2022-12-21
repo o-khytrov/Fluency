@@ -5,7 +5,7 @@ namespace Engine;
 
 public class BotRule
 {
-    public Func<TokenCollection, bool> Condition { get; set; }
+    public List<Func<BotInput, bool>> Conditions { get; set; } = new();
 
     public Pattern Pattern { get; set; }
 
@@ -19,9 +19,19 @@ public class BotRule
 
     public string Name { get; set; }
 
-    public string Execute(TokenCollection input)
+    public string Execute(BotInput input)
     {
-        if (Condition(input))
+        var isMatch = true;
+        foreach (var condition in Conditions)
+        {
+            if (!condition(input))
+            {
+                isMatch = false;
+                break;
+            }
+        }
+
+        if (isMatch)
         {
             return Output();
         }

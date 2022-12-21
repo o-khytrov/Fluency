@@ -6,10 +6,10 @@ Console.WriteLine("What is your name?");
 var username = Console.ReadLine();
 
 var bot = new TravelBot.TravelBot();
-var engine = new ChatEngine();
+var engine = new ChatEngine(new InMemoryChatContextStorage());
 while (true)
 {
     var input = Console.ReadLine();
-    var output = engine.Run(bot, input, username);
-    Console.WriteLine(output);
+    var output = await engine.Perform(bot, input, username);
+    Console.WriteLine(output.Text);
 }

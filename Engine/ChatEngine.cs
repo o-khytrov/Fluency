@@ -4,31 +4,36 @@ namespace Engine;
 
 public class ChatEngine
 {
-    public Dictionary<string, Conversation> Conversations { get; set; } = new();
+    private readonly IChatContextStorage _chatContextStorage;
 
-    public string Run(Bot bot, string input, string username)
+    public ChatEngine(IChatContextStorage chatContextStorage)
     {
-        if (!Conversations.ContainsKey(username))
-        {
-            Conversations.Add(username, new Conversation());
-        }
+        _chatContextStorage = chatContextStorage;
+    }
+
+
+    public async Task<BotResponse> Perform(Bot bot, string input, string username)
+    {
+        var conversation = await _chatContextStorage.GetConversation(username) ?? new Conversation();
 
         foreach (var rule in bot.BotRules)
         {
-            if (Conversations[username].RuleShown.Contains(rule) && !rule.Keep)
+            if (conversation.RuleShown.Contains(rule) && !rule.Keep)
             {
                 continue;
             }
 
-            var tokenCollection = new TokenCollection(input);
+            var tokenCollection = new BotInput(input);
             var output = rule.Execute(tokenCollection);
             if (!string.IsNullOrWhiteSpace(output))
             {
-                Conversations[username].RuleShown.Add(rule);
-                return output;
+                conversation.RuleShown.Add(rule);
+                return new BotResponse() { Text = output };
             }
         }
 
-        return bot.ChatCompleteMessage;
+        await _chatContextStorage.SaveConversation(conversation);
+
+        return new BotResponse() { Text = bot.ChatCompleteMessage };
     }
 }

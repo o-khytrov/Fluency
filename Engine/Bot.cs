@@ -11,7 +11,10 @@ public class Bot
 
     public RuleBuilder Gambit(string name = null)
     {
-        var rule = new BotRule();
+        var rule = new BotRule
+        {
+            Name = name
+        };
         BotRules.Add(rule);
         return new RuleBuilder(rule);
     }
@@ -21,4 +24,9 @@ public class Bot
         var index = new Random().Next(0, words.Length);
         return words[index];
     }
+}
+
+public class GenericBot<T> : Bot
+    where T : class
+{
 }

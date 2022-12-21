@@ -2,19 +2,21 @@ using System.Collections;
 
 namespace Engine.Tokenization;
 
-public class TokenCollection : IEnumerator<string>
+public class BotInput : IEnumerator<string>
 {
     private readonly string[] _tokens;
 
     private int _current;
+    private readonly Dictionary<string, object>? _variables;
 
     public string RawInput { get; }
 
-    public TokenCollection(string rawInput)
+    public BotInput(string rawInput, Dictionary<string, object>? variables = null)
     {
         _tokens = Tokenizer.TokenizeStrings(rawInput);
         _current = -1;
         RawInput = rawInput;
+        _variables = variables;
     }
 
     public bool MoveNext()
