@@ -1,7 +1,7 @@
 using Engine.PatternSystem;
 using Engine.Tokenization;
 
-namespace Engine;
+namespace Engine.Rules;
 
 public class BotRule
 {

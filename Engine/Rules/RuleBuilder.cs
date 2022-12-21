@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using Engine.PatternSystem;
 using Engine.Tokenization;
 
-namespace Engine;
+namespace Engine.Rules;
 
 public class RuleBuilder
 {
