@@ -21,6 +21,14 @@ public class PatternBuilder
         return this;
     }
 
+    public DisjunctionBuilder Disjunction(Action<DisjunctionBuilder> builderAction)
+    {
+        var disjunctionBuilder = new DisjunctionBuilder();
+        builderAction(disjunctionBuilder);
+        _pattern.Elements.Add(disjunctionBuilder.Build());
+        return disjunctionBuilder;
+    }
+
     public PatternBuilder Word(params string[] words)
     {
         _pattern.Elements.Add(new MultipleWordsPatternElement

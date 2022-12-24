@@ -10,6 +10,7 @@ var engine = new ChatEngine(new InMemoryChatContextStorage());
 while (true)
 {
     var input = Console.ReadLine();
-    var output = await engine.Perform(bot, input, username);
+    var userMessage = new UserMessage() { Text = input };
+    var output = await engine.Perform(bot, userMessage, username);
     Console.WriteLine(output.Text);
 }

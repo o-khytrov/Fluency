@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Bots\TravelBot\TravelBot.csproj" />
       <ProjectReference Include="..\Engine\Engine.csproj" />
       <ProjectReference Include="..\TravelBot\TravelBot.csproj" />
     </ItemGroup>

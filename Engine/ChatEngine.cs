@@ -12,10 +12,11 @@ public class ChatEngine
     }
 
 
-    public async Task<BotResponse> Perform(Bot bot, string input, string username)
+    public async Task<BotMessage> Perform(Bot bot, UserMessage userMessage, string username)
     {
         var conversation = await _chatContextStorage.GetConversation(username) ?? new Conversation();
-
+        conversation.Messages.Add(userMessage);
+        var botMessage = new BotMessage();
         foreach (var rule in bot.BotRules)
         {
             if (conversation.RuleShown.Contains(rule) && !rule.Keep)
@@ -23,17 +24,22 @@ public class ChatEngine
                 continue;
             }
 
-            var tokenCollection = new BotInput(input);
+            var tokenCollection = new BotInput(userMessage.Text, userMessage.Variables);
             var output = rule.Execute(tokenCollection);
             if (!string.IsNullOrWhiteSpace(output))
             {
                 conversation.RuleShown.Add(rule);
-                return new BotResponse() { Text = output };
+                botMessage.Text = output;
+                conversation.Messages.Add(botMessage);
+                await _chatContextStorage.SaveConversation(conversation);
+                return botMessage;
             }
         }
 
+        botMessage.Text = bot.ChatCompleteMessage;
+        conversation.Messages.Add(botMessage);
         await _chatContextStorage.SaveConversation(conversation);
-
-        return new BotResponse() { Text = bot.ChatCompleteMessage };
+        await _chatContextStorage.SaveConversation(conversation);
+        return botMessage;
     }
 }
