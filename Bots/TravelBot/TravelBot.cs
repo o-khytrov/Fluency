@@ -8,8 +8,10 @@ public class TravelBot : Bot<TravelBotContext>
 
     public TravelBot()
     {
+        string[] greetings = new[] { "Hello", "Hi", "Hey" };
+
         Gambit("Hello")
-            .WithPattern(x => x.Word("Hello"))
+            .WithPattern(x => x.Word(greetings))
             .WithOutput((c) =>
                 $"{OneOf("Hello", "Hi", "Hey")}. {OneOf("tell", "say")} me where you are and where do you want to {OneOf("travel", "go")}")
             .Keep()
