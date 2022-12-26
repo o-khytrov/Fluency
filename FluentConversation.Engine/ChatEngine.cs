@@ -1,6 +1,6 @@
-using Engine.Tokenization;
+using FluentConversation.Engine.Tokenization;
 
-namespace Engine;
+namespace FluentConversation.Engine;
 
 public class ChatEngine
 {

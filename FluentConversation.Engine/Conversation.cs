@@ -1,6 +1,6 @@
-using Engine.Rules;
+using FluentConversation.Engine.Rules;
 
-namespace Engine;
+namespace FluentConversation.Engine;
 
 public class Conversation
 {

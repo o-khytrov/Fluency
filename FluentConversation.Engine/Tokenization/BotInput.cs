@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Engine.Tokenization;
+namespace FluentConversation.Engine.Tokenization;
 
 public class BotInput : IEnumerator<string>
 {

@@ -1,6 +1,6 @@
-using Engine.Tokenization;
+using FluentConversation.Engine.Tokenization;
 
-namespace Engine.PatternSystem.Elements;
+namespace FluentConversation.Engine.PatternSystem.Elements;
 
 public abstract class PatternElement
 {

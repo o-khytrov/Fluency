@@ -1,4 +1,4 @@
-namespace Engine;
+namespace FluentConversation.Engine;
 
 public enum Language
 {

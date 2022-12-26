@@ -1,4 +1,4 @@
-namespace Engine.PatternSystem;
+namespace FluentConversation.Engine.PatternSystem;
 
 public enum PatternElementType : byte
 {

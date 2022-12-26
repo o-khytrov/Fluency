@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
-using Engine.PatternSystem;
-using Engine.Tokenization;
+using FluentConversation.Engine.PatternSystem;
+using FluentConversation.Engine.Tokenization;
 
-namespace Engine.Rules;
+namespace FluentConversation.Engine.Rules;
 
 public class RuleBuilder
 {

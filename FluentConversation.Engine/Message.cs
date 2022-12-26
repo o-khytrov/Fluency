@@ -1,6 +1,4 @@
-using System.Security.Principal;
-
-namespace Engine;
+namespace FluentConversation.Engine;
 
 public class Message
 {

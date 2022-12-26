@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Engine;
-using Engine.PatternSystem;
-using Engine.Tokenization;
+using FluentConversation.Engine.PatternSystem;
+using FluentConversation.Engine.Tokenization;
 using Xunit;
 
 namespace ConversationDesigner.Tests;
