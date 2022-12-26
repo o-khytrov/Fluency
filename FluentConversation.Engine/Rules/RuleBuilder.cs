@@ -1,46 +1,56 @@
 using System.Text.RegularExpressions;
 using FluentConversation.Engine.PatternSystem;
+using FluentConversation.Engine.PatternSystem.Elements;
 using FluentConversation.Engine.Tokenization;
 
 namespace FluentConversation.Engine.Rules;
 
-public class RuleBuilder
+public class RuleBuilder<T>
 {
     private static readonly Func<BotInput, bool> DefaultCondition = x => true;
-    private readonly BotRule _botRule;
-    private static readonly PatternEngine PatternEngine = new PatternEngine();
+    private readonly BotRule<T> _botRule;
 
-    public RuleBuilder(BotRule botRule)
+    public RuleBuilder(BotRule<T> botRule)
     {
         _botRule = botRule;
     }
 
-    public RuleBuilder Keep(bool keep = true)
+    /// <summary>
+    /// Keep the rule after it has been played
+    /// </summary>
+    /// <param name="keep"></param>
+    /// <returns></returns>
+    public RuleBuilder<T> Keep(bool keep = true)
     {
         _botRule.Keep = keep;
         return this;
     }
 
-    public RuleBuilder Repeat(bool repeat = true)
+    /// <summary>
+    /// Allow same output multiple times
+    /// </summary>
+    /// <param name="repeat"></param>
+    /// <returns></returns>
+    public RuleBuilder<T> Repeat(bool repeat = true)
     {
         _botRule.Repeat = repeat;
         return this;
     }
 
-    public RuleBuilder WithResponder(string output)
+    public RuleBuilder<T> WithResponder(string output)
     {
         return this;
     }
 
-    public RuleBuilder WithOutput(string template)
+    public RuleBuilder<T> WithOutput(string output)
     {
-        _botRule.Output = () => template;
+        _botRule.RenderOutput = (x) => output;
         return this;
     }
 
-    public RuleBuilder WithRegexPattern(string pattern)
+    public RuleBuilder<T> WithRegexPattern(string pattern)
     {
-        _botRule.Conditions.Add((input) =>
+        _botRule.Conditions.Add((c, input) =>
         {
             var regex = new Regex(pattern);
             var matches = regex.Matches(input.RawInput);
@@ -49,18 +59,18 @@ public class RuleBuilder
         return this;
     }
 
-    public RuleBuilder WithPattern(Action<PatternBuilder> patternBuilderAction)
+    public RuleBuilder<T> WithPattern(Action<PatternBuilder> patternBuilderAction)
     {
         var builder = new PatternBuilder();
         patternBuilderAction.Invoke(builder);
         _botRule.Pattern = builder.Build();
-        _botRule.Conditions.Add(x => PatternEngine.Match(_botRule.Pattern, x).Match);
         return this;
     }
 
-    public RuleBuilder WithRegexPattern(string pattern, Action<MatchCollection> action)
+
+    public RuleBuilder<T> WithRegexPattern(string pattern, Action<MatchCollection> action)
     {
-        _botRule.Conditions.Add((input) =>
+        _botRule.Conditions.Add((context, input) =>
         {
             var regex = new Regex(pattern);
             var matches = regex.Matches(input.RawInput);
@@ -75,19 +85,38 @@ public class RuleBuilder
         return this;
     }
 
-    public RuleBuilder When(Func<BotInput, bool> condition)
+
+    public RuleBuilder<T> When(Func<T, BotInput, bool> condition)
     {
         _botRule.Conditions.Add(condition);
         return this;
     }
 
-    public RuleBuilder WithOutput(Func<string> outputRenderer)
+    /// <summary>
+    /// Set post action, which will be executed after if pattern matches
+    /// </summary>
+    /// <param name="postAction"></param>
+    /// <returns></returns>
+    public RuleBuilder<T> Then(Action<T, PatternMatchingResult> postAction)
     {
-        _botRule.Output = outputRenderer;
+        _botRule.PostActions.Add(postAction);
         return this;
     }
 
-    public RuleBuilder WithTest(string input, string expectedResponse)
+    public RuleBuilder<T> WithOutput(Func<string> outputRenderer)
+    {
+        return this;
+    }
+
+    public RuleBuilder<T> WithOutput(Func<T, string> outputRenderer)
+    {
+        //_botRule.Output = ;
+
+        _botRule.RenderOutput = outputRenderer;
+        return this;
+    }
+
+    public RuleBuilder<T> WithTest(string input, string expectedResponse)
     {
         _botRule.Tests.Add(new RuleTest() { Input = input, ExpectedResponse = expectedResponse });
         return this;

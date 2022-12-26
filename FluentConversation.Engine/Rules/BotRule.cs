@@ -1,15 +1,18 @@
 using FluentConversation.Engine.PatternSystem;
+using FluentConversation.Engine.PatternSystem.Elements;
 using FluentConversation.Engine.Tokenization;
 
 namespace FluentConversation.Engine.Rules;
 
-public class BotRule
+public class BotRule<T>
 {
-    public List<Func<BotInput, bool>> Conditions { get; set; } = new();
+    public List<Func<T, BotInput, bool>> Conditions { get; set; } = new();
 
-    public Pattern Pattern { get; set; }
+    public List<Action<T, PatternMatchingResult>> PostActions = new();
 
-    public Func<string> Output { get; set; }
+    public Pattern? Pattern { get; set; }
+
+    public Func<T, string> RenderOutput { get; set; }
 
     public List<RuleTest> Tests { get; set; } = new();
 
@@ -19,24 +22,19 @@ public class BotRule
 
     public string? Name { get; set; }
 
-    public string Execute(BotInput input)
+    public bool IsPreConditionTrue(T context, BotInput input)
     {
         var isMatch = true;
         foreach (var condition in Conditions)
         {
-            if (!condition(input))
+            if (!condition(context, input))
             {
                 isMatch = false;
                 break;
             }
         }
 
-        if (isMatch)
-        {
-            return Output();
-        }
-
-        return string.Empty;
+        return isMatch;
     }
 }
 

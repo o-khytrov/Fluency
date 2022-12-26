@@ -2,23 +2,25 @@ using FluentConversation.Engine.Rules;
 
 namespace FluentConversation.Engine;
 
-public class Bot
+public class Bot<T> where T : new()
 {
     public Language Language { get; set; }
 
-    public List<BotRule> BotRules { get; set; } = new();
+    public T Context { get; set; }
+
+    public List<BotRule<T>> BotRules { get; set; } = new();
 
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
 
-    public RuleBuilder Gambit(string? name = null)
+    public RuleBuilder<T> Gambit(string? name = null)
     {
-        var rule = new BotRule
+        var rule = new BotRule<T>
         {
             Name = name
         };
         BotRules.Add(rule);
-        return new RuleBuilder(rule);
+        return new RuleBuilder<T>(rule);
     }
 
     public string OneOf(params string[] words)
@@ -26,9 +28,4 @@ public class Bot
         var index = new Random().Next(0, words.Length);
         return words[index];
     }
-}
-
-public class GenericBot<T> : Bot
-    where T : class
-{
 }

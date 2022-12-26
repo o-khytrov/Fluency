@@ -1,4 +1,4 @@
-namespace FluentConversation.Engine;
+namespace FluentConversation.Engine.Models;
 
 public class Message
 {

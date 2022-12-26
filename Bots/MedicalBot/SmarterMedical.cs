@@ -2,7 +2,7 @@
 
 namespace MedicalBot;
 
-public class SmarterMedical : GenericBot<MedicalBotContext>
+public class SmarterMedical : Bot<MedicalBotContext>
 {
     public string Sympathy { get; set; } = string.Empty;
 
