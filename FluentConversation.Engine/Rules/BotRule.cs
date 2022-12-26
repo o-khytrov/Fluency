@@ -17,7 +17,7 @@ public class BotRule
 
     public bool Repeat { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public string Execute(BotInput input)
     {

@@ -11,7 +11,7 @@ public class Bot
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
 
-    public RuleBuilder Gambit(string name = null)
+    public RuleBuilder Gambit(string? name = null)
     {
         var rule = new BotRule
         {

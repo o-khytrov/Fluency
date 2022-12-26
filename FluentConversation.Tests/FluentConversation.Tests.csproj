@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FluentConversation.Playground\FluentConversation.Playground.csproj" />
+      <ProjectReference Include="..\FluentConversation.Engine\FluentConversation.Engine.csproj" />
     </ItemGroup>
-
 </Project>
