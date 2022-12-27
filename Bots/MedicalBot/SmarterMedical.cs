@@ -10,17 +10,17 @@ public class SmarterMedical : Bot<MedicalBotContext>
 
     public SmarterMedical()
     {
-        Gambit("MEDICAL_START")
-            .WithOutput($"Welcome! How can I help you with your {QuestionType} question?");
+        R("MEDICAL_START")
+            .Output($"Welcome! How can I help you with your {QuestionType} question?");
 
-        Gambit("COST_REJOINDER")
-            .WithPattern(x =>
+        R("COST_REJOINDER")
+            .Pattern(x =>
             {
                 x.Disjunction(d =>
                 {
                     d.Add().Word("is", "are", "will").Word("this", "you").Word("free", "paid");
                     d.Add().Word("how", "are", "will").Word("this", "you").Word("free", "paid");
                 });
-            }).WithOutput("You pay 5$");
+            }).Output("You pay 5$");
     }
 }

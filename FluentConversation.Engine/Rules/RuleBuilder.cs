@@ -42,7 +42,7 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public RuleBuilder<T> WithOutput(string output)
+    public RuleBuilder<T> Output(string output)
     {
         _botRule.RenderOutput = (x) => output;
         return this;
@@ -59,7 +59,7 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public RuleBuilder<T> WithPattern(Action<PatternBuilder> patternBuilderAction)
+    public RuleBuilder<T> Pattern(Action<PatternBuilder> patternBuilderAction)
     {
         var builder = new PatternBuilder();
         patternBuilderAction.Invoke(builder);
@@ -103,12 +103,12 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public RuleBuilder<T> WithOutput(Func<string> outputRenderer)
+    public RuleBuilder<T> Output(Func<string> outputRenderer)
     {
         return this;
     }
 
-    public RuleBuilder<T> WithOutput(Func<T, string> outputRenderer)
+    public RuleBuilder<T> Output(Func<T, string> outputRenderer)
     {
         //_botRule.Output = ;
 

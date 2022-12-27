@@ -13,7 +13,7 @@ public class Bot<T> where T : new()
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
 
-    public RuleBuilder<T> Gambit(string? name = null)
+    public RuleBuilder<T> R(string? name = null)
     {
         var rule = new BotRule<T>
         {
