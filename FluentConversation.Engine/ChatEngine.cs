@@ -18,7 +18,7 @@ public class ChatEngine
 
     public async Task<BotMessage> Perform<T>(Bot<T> bot, UserMessage userMessage, string username) where T : new()
     {
-        var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>();
+        var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>() { UserId = username };
         conversation.Messages.Add(userMessage);
         var botMessage = new BotMessage();
         foreach (var rule in bot.BotRules)
@@ -29,7 +29,6 @@ public class ChatEngine
             }
 
             var botInput = new BotInput(userMessage.Text, userMessage.Variables);
-            var output = rule.IsPreConditionTrue(conversation.Context, botInput);
             if (rule.IsPreConditionTrue(conversation.Context, botInput))
             {
                 if (rule.Pattern is not null)
@@ -43,6 +42,7 @@ public class ChatEngine
                         }
 
                         conversation.RuleShown.Add(rule);
+                        botMessage.RuleName = rule.Name;
                         botMessage.Text = rule.RenderOutput(conversation.Context);
                         conversation.Messages.Add(botMessage);
                         await _chatContextStorage.SaveConversation(conversation);

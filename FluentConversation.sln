@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalBot", "Bots\MedicalB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bots", "Bots", "{77B57DD8-45E5-44B1-A768-56742D29F668}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelBot.Tests", "Bots\TravelBot.Tests\TravelBot.Tests.csproj", "{3D9DA739-CD40-477E-A22B-F816E58176EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentConversation.Testing", "FluentConversation.Testing\FluentConversation.Testing.csproj", "{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +42,18 @@ Global
 		{827ADD26-8C24-48FB-9920-0DB33CE0EED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{827ADD26-8C24-48FB-9920-0DB33CE0EED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{827ADD26-8C24-48FB-9920-0DB33CE0EED8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D9DA739-CD40-477E-A22B-F816E58176EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D9DA739-CD40-477E-A22B-F816E58176EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D9DA739-CD40-477E-A22B-F816E58176EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D9DA739-CD40-477E-A22B-F816E58176EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{827ADD26-8C24-48FB-9920-0DB33CE0EED8} = {77B57DD8-45E5-44B1-A768-56742D29F668}
 		{7276C501-2C2A-4C41-AD2B-DD3601792049} = {77B57DD8-45E5-44B1-A768-56742D29F668}
+		{3D9DA739-CD40-477E-A22B-F816E58176EC} = {77B57DD8-45E5-44B1-A768-56742D29F668}
 	EndGlobalSection
 EndGlobal

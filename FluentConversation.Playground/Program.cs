@@ -1,6 +1,5 @@
 ﻿using FluentConversation.Engine;
 using FluentConversation.Engine.Models;
-using TravelBot;
 
 Console.WriteLine("What is your name?");
 var username = Console.ReadLine() ?? string.Empty;
@@ -11,6 +10,6 @@ while (true)
 {
     var input = Console.ReadLine() ?? string.Empty;
     var userMessage = new UserMessage() { Text = input };
-    var output = await engine.Perform<TravelBotContext>(bot, userMessage, username);
+    var output = await engine.Perform(bot, userMessage, username);
     Console.WriteLine(output.Text);
 }

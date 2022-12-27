@@ -13,4 +13,5 @@ public class UserMessage : Message
 
 public class BotMessage : Message
 {
+    public string? RuleName { get; set; }
 }
