@@ -8,7 +8,7 @@ public class ChatEngine
 {
     private readonly IChatContextStorage _chatContextStorage;
 
-    private readonly PatternEngine PatternEngine = new PatternEngine();
+    private readonly PatternEngine _patternEngine = new();
 
     public ChatEngine(IChatContextStorage chatContextStorage)
     {
@@ -31,23 +31,28 @@ public class ChatEngine
             var botInput = new BotInput(userMessage.Text, userMessage.Variables);
             if (rule.IsPreConditionTrue(conversation.Context, botInput))
             {
+                var isMatch = true;
                 if (rule.Pattern is not null)
                 {
-                    var matchingResult = PatternEngine.Match(rule.Pattern, botInput);
+                    var matchingResult = _patternEngine.Match(rule.Pattern, botInput);
+                    isMatch = matchingResult.Match;
                     if (matchingResult.Match)
                     {
                         foreach (var postAction in rule.PostActions)
                         {
                             postAction(conversation.Context, matchingResult);
                         }
-
-                        conversation.RuleShown.Add(rule);
-                        botMessage.RuleName = rule.Name;
-                        botMessage.Text = rule.RenderOutput(conversation.Context);
-                        conversation.Messages.Add(botMessage);
-                        await _chatContextStorage.SaveConversation(conversation);
-                        return botMessage;
                     }
+                }
+
+                if (isMatch)
+                {
+                    conversation.RuleShown.Add(rule);
+                    botMessage.RuleName = rule.Name;
+                    botMessage.Text = rule.RenderOutput(conversation.Context);
+                    conversation.Messages.Add(botMessage);
+                    await _chatContextStorage.SaveConversation(conversation);
+                    return botMessage;
                 }
             }
         }
