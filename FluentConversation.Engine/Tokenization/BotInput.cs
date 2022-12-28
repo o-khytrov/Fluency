@@ -1,19 +1,19 @@
 using System.Collections;
+using Catalyst;
 
 namespace FluentConversation.Engine.Tokenization;
 
-public class BotInput : IEnumerator<string>
+public class BotInput
 {
-    private readonly string[] _tokens;
-
     private int _current;
     private readonly Dictionary<string, object>? _variables;
+
+    public List<IToken>? Document { get; set; }
 
     public string RawInput { get; }
 
     public BotInput(string rawInput, Dictionary<string, object>? variables = null)
     {
-        _tokens = Tokenizer.TokenizeStrings(rawInput);
         _current = -1;
         RawInput = rawInput;
         _variables = variables;
@@ -32,7 +32,7 @@ public class BotInput : IEnumerator<string>
 
     public bool CanMoveNext()
     {
-        return _current < _tokens.Length - 1;
+        return _current < Document.Count - 1;
     }
 
     public void Reset()
@@ -40,9 +40,7 @@ public class BotInput : IEnumerator<string>
         _current = -1;
     }
 
-    public string Current => _tokens[_current];
-
-    object IEnumerator.Current => Current;
+    public IToken Current => Document[_current];
 
     public void Dispose()
     {

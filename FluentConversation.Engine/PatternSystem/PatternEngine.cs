@@ -9,6 +9,7 @@ public class PatternEngine
     {
         var extracted = new List<string>();
         var isMatch = true;
+        input.Reset();
         foreach (var element in pattern.Elements)
         {
             var currentRuleMatch = false;

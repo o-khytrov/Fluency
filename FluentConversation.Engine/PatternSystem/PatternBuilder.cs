@@ -1,25 +1,19 @@
+using Catalyst;
 using FluentConversation.Engine.PatternSystem.Elements;
-using FluentConversation.Engine.Tokenization;
 
 namespace FluentConversation.Engine.PatternSystem;
 
 public class PatternBuilder
 {
     private readonly Pattern _pattern;
+    private Tokenizer _tokenizer;
 
     public PatternBuilder()
     {
         _pattern = new Pattern();
+        _tokenizer = new Tokenizer();
     }
 
-    public PatternBuilder Word(string word)
-    {
-        _pattern.Elements.Add(new SingleWordPatternElement
-        {
-            PatternElementType = PatternElementType.Word, Value = word.Trim()
-        });
-        return this;
-    }
 
     public DisjunctionBuilder Disjunction(Action<DisjunctionBuilder> builderAction)
     {
@@ -27,6 +21,24 @@ public class PatternBuilder
         builderAction(disjunctionBuilder);
         _pattern.Elements.Add(disjunctionBuilder.Build());
         return disjunctionBuilder;
+    }
+
+    public PatternBuilder Lemma(string word)
+    {
+        _pattern.Elements.Add(new SingleWordPatternElement
+        {
+            PatternElementType = PatternElementType.Word, Value = word.Trim(), Lemma = true
+        });
+        return this;
+    }
+
+    public PatternBuilder Word(string word)
+    {
+        _pattern.Elements.Add(new SingleWordPatternElement
+        {
+            PatternElementType = PatternElementType.Word, Value = word.Trim(),
+        });
+        return this;
     }
 
     public PatternBuilder Word(params string[] words)
@@ -41,12 +53,12 @@ public class PatternBuilder
 
     public PatternBuilder Phrase(string phrase)
     {
-        var tokens = new BotInput(phrase);
+        var tokens = _tokenizer.Tokenize(phrase).ToTokenList();
         _pattern.Elements.Add(new PhrasePatternElement(tokens) { PatternElementType = PatternElementType.Word });
         return this;
     }
 
-    public PatternBuilder Wildcard(Action<string>? resultAction = null)
+    public PatternBuilder Wildcard(Action<IToken>? resultAction = null)
     {
         _pattern.Elements.Add(new WildcardPatternElement(resultAction)
         {

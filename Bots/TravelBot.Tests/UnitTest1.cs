@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using FluentConversation.Engine;
+using FluentConversation.Engine.PatternSystem;
 using FluentConversation.Testing;
 using Xunit;
 
@@ -16,7 +17,7 @@ public class UnitTest1
 
     private async Task TestBot<TB, TC>(TestConversation testConversation) where TB : Bot<TC>, new() where TC : new()
     {
-        var engine = new ChatEngine(new InMemoryChatContextStorage());
+        var engine = new ChatEngine(new InMemoryChatContextStorage(), new Tokenizer(), new PatternEngine());
         var bot = new TB();
         foreach (var volley in testConversation)
         {

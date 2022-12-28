@@ -8,11 +8,18 @@ public class ChatEngine
 {
     private readonly IChatContextStorage _chatContextStorage;
 
-    private readonly PatternEngine _patternEngine = new();
+    private readonly PatternEngine _patternEngine;
+    private readonly Tokenizer _tokenizer;
 
-    public ChatEngine(IChatContextStorage chatContextStorage)
+    public ChatEngine(IChatContextStorage chatContextStorage,
+        Tokenizer tokenizer,
+        PatternEngine patternEngine
+    )
+
     {
         _chatContextStorage = chatContextStorage;
+        _tokenizer = tokenizer;
+        _patternEngine = patternEngine;
     }
 
 
@@ -21,6 +28,8 @@ public class ChatEngine
         var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>() { UserId = username };
         conversation.Messages.Add(userMessage);
         var botMessage = new BotMessage();
+        var botInput = new BotInput(userMessage.Text, userMessage.Variables);
+        botInput.Document = _tokenizer.Tokenize(botInput.RawInput).ToTokenList();
         foreach (var rule in bot.BotRules)
         {
             if (conversation.RuleShown.Contains(rule) && !rule.Keep)
@@ -28,7 +37,6 @@ public class ChatEngine
                 continue;
             }
 
-            var botInput = new BotInput(userMessage.Text, userMessage.Variables);
             if (rule.IsPreConditionTrue(conversation.Context, botInput))
             {
                 var isMatch = true;

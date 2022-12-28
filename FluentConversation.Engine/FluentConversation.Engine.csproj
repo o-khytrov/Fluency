@@ -6,4 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Catalyst" Version="1.0.33442" />
+      <PackageReference Include="Catalyst.Models.English" Version="1.0.30952" />
+      <PackageReference Include="Catalyst.WordNet" Version="1.0.33442" />
+    </ItemGroup>
+
 </Project>

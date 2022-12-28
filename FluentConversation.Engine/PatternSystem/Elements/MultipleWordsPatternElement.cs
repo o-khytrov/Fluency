@@ -1,3 +1,4 @@
+using Catalyst;
 using FluentConversation.Engine.Tokenization;
 
 namespace FluentConversation.Engine.PatternSystem.Elements;
@@ -19,7 +20,7 @@ public class MultipleWordsPatternElement : PatternElement
         foreach (var value in Values)
         {
             var token = input.Current;
-            isMatch = string.Equals(value, token, StringComparison);
+            isMatch = MemoryExtensions.Equals(value, token.ValueAsSpan, StringComparison);
             if (isMatch)
             {
                 break;

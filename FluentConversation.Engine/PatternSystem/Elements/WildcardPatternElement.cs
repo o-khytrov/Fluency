@@ -1,12 +1,13 @@
+using Catalyst;
 using FluentConversation.Engine.Tokenization;
 
 namespace FluentConversation.Engine.PatternSystem.Elements;
 
 public class WildcardPatternElement : PatternElement
 {
-    private readonly Action<string>? _action;
+    private readonly Action<IToken>? _action;
 
-    public WildcardPatternElement(Action<string>? action = null)
+    public WildcardPatternElement(Action<IToken>? action = null)
     {
         _action = action;
     }
@@ -19,13 +20,9 @@ public class WildcardPatternElement : PatternElement
         }
 
         var token = input.Current;
-        if (!string.IsNullOrWhiteSpace(token))
-        {
-            extracted.Add(token);
-            _action?.Invoke(token);
-            return true;
-        }
 
-        return false;
+        extracted.Add(token.Value);
+        _action?.Invoke(token);
+        return true;
     }
 }

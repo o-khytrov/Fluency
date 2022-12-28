@@ -1,4 +1,5 @@
 using FluentConversation.Engine.Rules;
+using Mosaik.Core;
 
 namespace FluentConversation.Engine;
 
