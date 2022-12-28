@@ -20,13 +20,13 @@ public class TravelBot : Bot<TravelBotContext>
 
         R("SOURCE")
             .Pattern(x =>
-                x.Word("I", "we").Word("am", "are").Word("at", "in").Wildcard())
+                x.Word("I", "we").Lemma("be").Word("at", "in").Wildcard())
             .Then((x, m) => x.Source = m[0])
             .Output((c) => $"Ok you are in {c.Source}");
 
         R("TARGET")
             .Pattern(x =>
-                x.Word("I", "we").Word("want").Phrase("to go to").Wildcard())
+                x.Word("I", "we").Lemma("want").Phrase("to go to").Wildcard())
             .Then((x, m) => x.Target = m[0])
             .Output(c => $"Ok you want to go to {c.Target}");
 

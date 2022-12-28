@@ -18,7 +18,7 @@ public class SingleWordPatternElement : PatternElement
         }
 
         var token = input.Current;
-        var isMatch = MemoryExtensions.Equals(Value, Lemma ? token.ValueAsSpan : token.Lemma, StringComparison);
+        var isMatch = MemoryExtensions.Equals(Value, Lemma ? token.Lemma : token.ValueAsSpan, StringComparison);
 
         return isMatch;
     }
