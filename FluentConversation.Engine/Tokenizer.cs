@@ -11,7 +11,6 @@ public class Tokenizer
     public Tokenizer()
     {
         Catalyst.Models.English.Register(); //You need to pre-register each language (and install the respective NuGet Packages)
-
         _nlp = Pipeline.For(Language.English);
     }
 

@@ -14,7 +14,7 @@ public class Bot<T> where T : new()
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
 
-    public RuleBuilder<T> R(string? name = null)
+    protected RuleBuilder<T> R(string? name = null)
     {
         var rule = new BotRule<T>
         {
@@ -23,6 +23,13 @@ public class Bot<T> where T : new()
         BotRules.Add(rule);
         return new RuleBuilder<T>(rule);
     }
+
+
+    protected T? When(Func<T, bool> predicate, Action action)
+    {
+        return default(T);
+    }
+
 
     public string OneOf(params string[] words)
     {
