@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using FluentConversation.Engine;
 using Mosaik.Core;
 
@@ -7,6 +8,8 @@ public class TravelBot : Bot<TravelBotContext>
 {
     public Language Language => Language.English;
 
+    [SuppressMessage("ReSharper.DPA", "DPA0003: Excessive memory allocations in LOH", MessageId = "type: System.Byte[]; size: 51MB")]
+    [SuppressMessage("ReSharper.DPA", "DPA0003: Excessive memory allocations in LOH", MessageId = "type: System.Byte[]; size: 101MB")]
     public TravelBot()
     {
         var greetings = new[] { "Hello", "Hi", "Hey" };
@@ -31,6 +34,14 @@ public class TravelBot : Bot<TravelBotContext>
             .Then((x, m) => x.Target = m[0])
             .Output(c => $"Ok you want to go to {c.Target}")
             .Keep();
+
+        R("COST")
+            .Pattern(x =>
+                x.Or(
+                    b => b.Word("cost"),
+                    b => b.Word("money"))
+            )
+            .Output("It costs 5$");
 
         R("ASK_SOURCE")
             .Keep()

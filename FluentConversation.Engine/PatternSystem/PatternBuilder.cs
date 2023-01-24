@@ -15,12 +15,18 @@ public class PatternBuilder
     }
 
 
-    public DisjunctionBuilder Disjunction(Action<DisjunctionBuilder> builderAction)
+    public PatternBuilder Or(params Action<PatternBuilder>[] patternBuilderAction)
     {
-        var disjunctionBuilder = new DisjunctionBuilder();
-        builderAction(disjunctionBuilder);
-        _pattern.Elements.Add(disjunctionBuilder.Build());
-        return disjunctionBuilder;
+        var patterns = new List<Pattern>();
+        foreach (var builderAction in patternBuilderAction)
+        {
+            var builder = new PatternBuilder();
+            builderAction.Invoke(builder);
+            patterns.Add(builder.Build());
+        }
+
+        _pattern.Elements.Add(new Disjunction(patterns));
+        return this;
     }
 
     public PatternBuilder Lemma(string word)

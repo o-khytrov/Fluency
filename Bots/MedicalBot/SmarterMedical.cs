@@ -28,7 +28,7 @@ public class SmarterMedical : Bot<MedicalBotContext>
         R("COST_REJOINDER")
             .Pattern(x =>
             {
-                x.Disjunction(d =>
+                x.Or(d =>
                 {
                     d.Add().Word("is", "are", "will").Word("this", "you").Word("free", "paid");
                     d.Add().Word("how", "are", "will").Word("this", "you").Word("free", "paid");

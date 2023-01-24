@@ -4,18 +4,19 @@ namespace FluentConversation.Engine.PatternSystem.Elements;
 
 public class Disjunction : PatternElement
 {
-    private readonly Pattern _pattern;
+    private readonly List<Pattern> _patterns;
 
-    public Disjunction()
+    public Disjunction(List<Pattern> patterns)
     {
-        _pattern =  new Pattern();
+        _patterns = patterns;
     }
 
     public override bool Match(BotInput input, List<string> extracted)
     {
-        foreach (var element in _pattern.Elements)
+        foreach (var childPattern in _patterns)
         {
-            var match = element.Match(input, extracted);
+            input.Reset();
+            var match = MatchChildPattern(input, childPattern, extracted);
             if (match)
             {
                 return true;
@@ -25,8 +26,16 @@ public class Disjunction : PatternElement
         return false;
     }
 
-    public void AddElement(PatternElement element)
+    private bool MatchChildPattern(BotInput input, Pattern childPattern, List<string> extracted)
     {
-        this._pattern.Elements.Add(element);
+        var matched = true;
+        foreach (var element in childPattern.Elements)
+        {
+            matched = element.Match(input, extracted);
+            if (!matched)
+                break;
+        }
+
+        return matched;
     }
 }
