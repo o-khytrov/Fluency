@@ -6,7 +6,7 @@ namespace FluentConversation.Engine.PatternSystem;
 public class PatternBuilder
 {
     private readonly Pattern _pattern;
-    private Tokenizer _tokenizer;
+    private readonly Tokenizer _tokenizer;
 
     public PatternBuilder()
     {
@@ -15,6 +15,11 @@ public class PatternBuilder
     }
 
 
+    /// <summary>
+    /// Disjunction: match one of provided patterns
+    /// </summary>
+    /// <param name="patternBuilderAction"></param>
+    /// <returns></returns>
     public PatternBuilder Or(params Action<PatternBuilder>[] patternBuilderAction)
     {
         var patterns = new List<Pattern>();
@@ -29,6 +34,11 @@ public class PatternBuilder
         return this;
     }
 
+    /// <summary>
+    /// Matches word in canonical form
+    /// </summary>
+    /// <param name="word"></param>
+    /// <returns></returns>
     public PatternBuilder Lemma(string word)
     {
         _pattern.Elements.Add(new SingleWordPatternElement
@@ -38,6 +48,11 @@ public class PatternBuilder
         return this;
     }
 
+    /// <summary>
+    /// Match single word
+    /// </summary>
+    /// <param name="word"></param>
+    /// <returns></returns>
     public PatternBuilder Word(string word)
     {
         _pattern.Elements.Add(new SingleWordPatternElement
@@ -47,6 +62,11 @@ public class PatternBuilder
         return this;
     }
 
+    /// <summary>
+    /// Match one one provided words 
+    /// </summary>
+    /// <param name="words"></param>
+    /// <returns></returns>
     public PatternBuilder Word(params string[] words)
     {
         _pattern.Elements.Add(new MultipleWordsPatternElement
