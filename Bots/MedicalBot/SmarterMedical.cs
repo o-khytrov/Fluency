@@ -30,8 +30,7 @@ public class SmarterMedical : Bot<MedicalBotContext>
             {
                 x.Or(d =>
                 {
-                    d.Add().Word("is", "are", "will").Word("this", "you").Word("free", "paid");
-                    d.Add().Word("how", "are", "will").Word("this", "you").Word("free", "paid");
+                    x.Word("is", "are", "will").Word("this", "you").Word("free", "paid");
                 });
             }).Output("You pay 5$");
     }

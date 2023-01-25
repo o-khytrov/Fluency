@@ -37,7 +37,8 @@ public class TravelBot : Bot<TravelBotContext>
                 x.Or(
                     b => b.Word("cost"),
                     b => b.Word("pay"),
-                    b => b.Word("money")
+                    b => b.Word("money"),
+                    b => b.Word("is", "are", "will").Word("this", "you").Word("free", "paid")
                 )
             )
             .Output("It costs 5$");
