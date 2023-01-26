@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Catalyst;
 using Mosaik.Core;
 
@@ -8,15 +7,9 @@ public class Tokenizer
 {
     private readonly Pipeline _nlp;
 
-    public Tokenizer()
+    public Tokenizer(Pipeline pipeline)
     {
-        Catalyst.Models.English.Register(); //You need to pre-register each language (and install the respective NuGet Packages)
-        _nlp = Pipeline.For(Language.English);
-    }
-
-    public string[] TokenizeStrings(string input)
-    {
-        return input.Split(new[] { ' ', '?', '!', ';' });
+        _nlp = pipeline;
     }
 
     public Document Tokenize(string text)

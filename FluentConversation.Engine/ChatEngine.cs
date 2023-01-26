@@ -23,7 +23,7 @@ public class ChatEngine
     }
 
 
-    public async Task<BotMessage> Perform<T>(Bot<T> bot, UserMessage userMessage, string username) where T : new()
+    public async Task<BotMessage> PerformChatAsync<T>(Bot<T> bot, UserMessage userMessage, string username) where T : new()
     {
         var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>() { UserId = username };
         conversation.Messages.Add(userMessage);

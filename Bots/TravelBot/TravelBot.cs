@@ -5,7 +5,9 @@ namespace TravelBot;
 
 public class TravelBot : Bot<TravelBotContext>
 {
-    public Language Language => Language.English;
+    public override Language Language => Language.English;
+
+    public override string Name => "Travel agent";
 
     public TravelBot()
     {

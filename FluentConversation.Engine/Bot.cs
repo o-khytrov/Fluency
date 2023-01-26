@@ -3,11 +3,11 @@ using Mosaik.Core;
 
 namespace FluentConversation.Engine;
 
-public class Bot<T> where T : new()
+public abstract class Bot<T>
 {
-    public Language Language { get; set; }
+    public abstract Language Language { get; } 
 
-    public T Context { get; set; }
+    public abstract string Name { get;}
 
     public List<BotRule<T>> BotRules { get; set; } = new();
 

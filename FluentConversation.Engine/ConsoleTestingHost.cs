@@ -1,26 +1,23 @@
 using FluentConversation.Engine.Models;
-using FluentConversation.Engine.PatternSystem;
 
 namespace FluentConversation.Engine;
 
-public class ConsoleTestingHost<T, R> where T : Bot<R>, new() where R : new()
+public class ConsoleTestingHost
 {
-    private Tokenizer _tokenizer;
+    private readonly ChatEngine _chatEngine;
 
-    public ConsoleTestingHost()
+    public ConsoleTestingHost(ChatEngine chatEngine)
     {
-        _tokenizer = new Tokenizer();
+        _chatEngine = chatEngine;
     }
 
-    public async Task Run()
+    public async Task RunAsync<T>(Bot<T> bot) where T : new()
 
     {
-        var engine = new ChatEngine(new InMemoryChatContextStorage(), _tokenizer, new PatternEngine());
         Console.WriteLine("Engine created...");
         Console.WriteLine("What is your name?");
         var username = Console.ReadLine() ?? string.Empty;
 
-        var bot = new T();
         while (true)
         {
             var input = Console.ReadLine() ?? string.Empty;
@@ -30,10 +27,11 @@ public class ConsoleTestingHost<T, R> where T : Bot<R>, new() where R : new()
             }
 
             var userMessage = new UserMessage() { Text = input };
-            var output = await engine.Perform(bot, userMessage, username);
+            var output = await _chatEngine.PerformChatAsync(bot, userMessage, username);
 
             var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(bot.Name + ">");
             Console.WriteLine(output.Text);
             Console.ForegroundColor = color;
         }

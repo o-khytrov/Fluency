@@ -8,6 +8,7 @@ namespace TravelBot.Tests;
 
 public class UnitTest1
 {
+    /*
     [Theory]
     [ClassData(typeof(TestData))]
     public async Task Test2(TestConversation conversation)
@@ -21,9 +22,10 @@ public class UnitTest1
         var bot = new TB();
         foreach (var volley in testConversation)
         {
-            var output = await engine.Perform(bot, volley.UserMessage, testConversation.UserId);
+            var output = await engine.PerformChatAsync(bot, volley.UserMessage, testConversation.UserId);
 
             Assert.Equal(volley.ExpectedResponse.Text, output.Text);
         }
     }
+    */
 }

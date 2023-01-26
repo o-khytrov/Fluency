@@ -1,5 +1,6 @@
 ﻿using FluentConversation.Engine;
 using FluentConversation.Engine.Tokenization;
+using Mosaik.Core;
 
 namespace LegalBot;
 
@@ -25,4 +26,8 @@ public class LegalBot : Bot<LegalConversationContext>
 
         return true;
     }
+
+    public override Language Language => Language.English;
+
+    public override string Name => "Lawyer";
 }

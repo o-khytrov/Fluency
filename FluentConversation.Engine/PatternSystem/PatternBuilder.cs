@@ -11,7 +11,6 @@ public class PatternBuilder
     public PatternBuilder()
     {
         _pattern = new Pattern();
-        _tokenizer = new Tokenizer();
     }
 
 

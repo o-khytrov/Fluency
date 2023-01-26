@@ -1,4 +1,5 @@
 ﻿using FluentConversation.Engine;
+using Mosaik.Core;
 
 namespace MedicalBot;
 
@@ -26,12 +27,11 @@ public class SmarterMedical : Bot<MedicalBotContext>
                     "When did the_rash start? Is it affecting a particular part of body?");
 
         R("COST_REJOINDER")
-            .Pattern(x =>
-            {
-                x.Or(d =>
-                {
-                    x.Word("is", "are", "will").Word("this", "you").Word("free", "paid");
-                });
-            }).Output("You pay 5$");
+            .Pattern(x => { x.Or(d => { x.Word("is", "are", "will").Word("this", "you").Word("free", "paid"); }); })
+            .Output("You pay 5$");
     }
+
+    public override Language Language => Language.English;
+
+    public override string Name => "Doctor";
 }
