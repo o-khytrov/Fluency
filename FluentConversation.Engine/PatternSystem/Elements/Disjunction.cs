@@ -31,9 +31,18 @@ public class Disjunction : PatternElement
         var matched = true;
         foreach (var element in childPattern.Elements)
         {
-            matched = element.Match(input, extracted, tokenizer);
-            if (!matched)
+            var currentRuleMatch = false;
+            input.Reset();
+            while (!currentRuleMatch && input.CanMoveNext())
+            {
+                currentRuleMatch = element.Match(input, extracted, tokenizer);
+            }
+
+            if (!currentRuleMatch)
+            {
+                matched = false;
                 break;
+            }
         }
 
         return matched;

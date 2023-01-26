@@ -31,7 +31,7 @@ public class ConsoleTestingHost
 
             var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(bot.Name + ">");
+            Console.Write(bot.Name + ": > ");
             Console.WriteLine(output.Text);
             Console.ForegroundColor = color;
         }
