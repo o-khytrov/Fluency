@@ -12,7 +12,7 @@ public class WildcardPatternElement : PatternElement
         _action = action;
     }
 
-    public override bool Match(BotInput input, List<string> extracted)
+    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
     {
         if (!input.MoveNext())
         {

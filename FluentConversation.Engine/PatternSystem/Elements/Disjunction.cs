@@ -11,12 +11,12 @@ public class Disjunction : PatternElement
         _patterns = patterns;
     }
 
-    public override bool Match(BotInput input, List<string> extracted)
+    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
     {
         foreach (var childPattern in _patterns)
         {
             input.Reset();
-            var match = MatchChildPattern(input, childPattern, extracted);
+            var match = MatchChildPattern(input, childPattern, extracted, tokenizer);
             if (match)
             {
                 return true;
@@ -26,12 +26,12 @@ public class Disjunction : PatternElement
         return false;
     }
 
-    private bool MatchChildPattern(BotInput input, Pattern childPattern, List<string> extracted)
+    private bool MatchChildPattern(BotInput input, Pattern childPattern, List<string> extracted, Tokenizer tokenizer)
     {
         var matched = true;
         foreach (var element in childPattern.Elements)
         {
-            matched = element.Match(input, extracted);
+            matched = element.Match(input, extracted, tokenizer);
             if (!matched)
                 break;
         }

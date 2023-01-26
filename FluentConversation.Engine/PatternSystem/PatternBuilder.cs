@@ -6,13 +6,11 @@ namespace FluentConversation.Engine.PatternSystem;
 public class PatternBuilder
 {
     private readonly Pattern _pattern;
-    private readonly Tokenizer _tokenizer;
 
     public PatternBuilder()
     {
         _pattern = new Pattern();
     }
-
 
     /// <summary>
     /// Disjunction: match one of provided patterns
@@ -78,8 +76,7 @@ public class PatternBuilder
 
     public PatternBuilder Phrase(string phrase)
     {
-        var tokens = _tokenizer.Tokenize(phrase).ToTokenList();
-        _pattern.Elements.Add(new PhrasePatternElement(tokens) { PatternElementType = PatternElementType.Word });
+        _pattern.Elements.Add(new PhrasePatternElement(phrase) { PatternElementType = PatternElementType.Word });
         return this;
     }
 

@@ -10,7 +10,7 @@ public class SingleWordPatternElement : PatternElement
 
     public StringComparison StringComparison { get; set; } = StringComparison.OrdinalIgnoreCase;
 
-    public override bool Match(BotInput input, List<string> extracted)
+    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
     {
         if (!input.MoveNext())
         {

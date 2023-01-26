@@ -5,6 +5,13 @@ namespace FluentConversation.Engine.PatternSystem;
 
 public class PatternEngine
 {
+    private Tokenizer _tokenizer;
+
+    public PatternEngine(Tokenizer tokenizer)
+    {
+        _tokenizer = tokenizer;
+    }
+
     public PatternMatchingResult Match(Pattern pattern, BotInput input)
     {
         var extracted = new List<string>();
@@ -15,7 +22,7 @@ public class PatternEngine
             var currentRuleMatch = false;
             while (!currentRuleMatch && input.CanMoveNext())
             {
-                currentRuleMatch = element.Match(input, extracted);
+                currentRuleMatch = element.Match(input, extracted, _tokenizer);
             }
 
             if (!currentRuleMatch)

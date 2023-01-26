@@ -5,28 +5,30 @@ namespace FluentConversation.Engine.PatternSystem.Elements;
 
 public class PhrasePatternElement : PatternElement
 {
-    private readonly List<IToken> _value;
+    private List<IToken>? _phraseTokens;
 
     private readonly StringComparison _stringComparison;
+    private readonly string _phrase;
 
-    public PhrasePatternElement(List<IToken> value, StringComparison? stringComparison = null)
+    public PhrasePatternElement(string phrase, StringComparison? stringComparison = null)
     {
-        _value = value;
+        _phrase = phrase;
         _stringComparison = stringComparison ?? StringComparison.OrdinalIgnoreCase;
     }
 
-
-    public override bool Match(BotInput input, List<string> extracted)
+    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
     {
+        _phraseTokens ??= tokenizer.Tokenize(_phrase).ToTokenList();
+
         var isMatch = true;
-        foreach (var value in _value)
+        foreach (var value in _phraseTokens)
         {
             if (!input.MoveNext())
             {
                 return false;
             }
 
-            isMatch = MemoryExtensions.Equals(value.ValueAsSpan, input.Current.ValueAsSpan, _stringComparison);
+            isMatch = value.ValueAsSpan.Equals(input.Current.ValueAsSpan, _stringComparison);
             if (!isMatch)
             {
                 break;

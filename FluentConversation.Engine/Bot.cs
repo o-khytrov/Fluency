@@ -5,9 +5,9 @@ namespace FluentConversation.Engine;
 
 public abstract class Bot<T>
 {
-    public abstract Language Language { get; } 
+    public abstract Language Language { get; }
 
-    public abstract string Name { get;}
+    public abstract string Name { get; }
 
     public List<BotRule<T>> BotRules { get; set; } = new();
 

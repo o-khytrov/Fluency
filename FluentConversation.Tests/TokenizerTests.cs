@@ -1,6 +1,10 @@
 using System.Collections.Generic;
+using Catalyst;
+using FluentConversation.Engine;
 using FluentConversation.Engine.PatternSystem;
 using FluentConversation.Engine.Tokenization;
+using Microsoft.ML.Transforms.Text;
+using Mosaik.Core;
 using Xunit;
 
 namespace ConversationDesigner.Tests;
@@ -14,7 +18,7 @@ public class TokenizerTests
     {
         var patternBuilder = new PatternBuilder();
         patternBuilder.Word("I", "we").Word("am", "are").Word("at", "in").Wildcard();
-        var patternEngine = new PatternEngine();
+        var patternEngine = new PatternEngine(new Tokenizer(Pipeline.For(Language.English)));
         var result = patternEngine.Match(patternBuilder.Build(), new BotInput(input));
         Assert.True(result.Match);
 
