@@ -37,6 +37,11 @@ public class ChatEngine
                 continue;
             }
 
+            foreach (var preAction in rule.PreActions)
+            {
+                preAction.Invoke(botInput, conversation.Context);
+            }
+
             if (rule.IsPreConditionTrue(conversation.Context, botInput))
             {
                 var isMatch = true;

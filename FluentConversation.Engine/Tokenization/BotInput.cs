@@ -6,7 +6,8 @@ namespace FluentConversation.Engine.Tokenization;
 public class BotInput
 {
     private int _current;
-    private readonly Dictionary<string, object>? _variables;
+
+    public Dictionary<string, object>? Variables { get; }
 
     public List<IToken>? Document { get; set; }
 
@@ -16,7 +17,7 @@ public class BotInput
     {
         _current = -1;
         RawInput = rawInput;
-        _variables = variables;
+        Variables = variables;
     }
 
     public bool MoveNext()
@@ -42,7 +43,31 @@ public class BotInput
 
     public IToken Current => Document[_current];
 
-    public void Dispose()
+    public object? TryGetVariable(string key, object? defaultValue = null)
     {
+        if (Variables is not null && Variables.ContainsKey(key))
+        {
+            return Variables[key];
+        }
+
+        return defaultValue;
+    }
+
+    public T? TryGetVariable<T>(string key)
+    {
+        var readData = TryGetVariable(key);
+        if (readData is T data)
+        {
+            return data;
+        }
+
+        try
+        {
+            return (T) Convert.ChangeType(readData, typeof(T));
+        }
+        catch (InvalidCastException)
+        {
+            return default;
+        }
     }
 }

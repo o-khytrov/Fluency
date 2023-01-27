@@ -3,6 +3,7 @@ using FluentConversation.Engine;
 using FluentConversation.Engine.PatternSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Mosaik.Core;
+using TravelBot.GeneralBot;
 
 
 Catalyst.Models.English.Register();
@@ -16,4 +17,4 @@ var serviceProvider = new ServiceCollection()
     .BuildServiceProvider();
 
 var bar = serviceProvider.GetRequiredService<ConsoleTestingHost>();
-await bar.RunAsync(new TravelBot.TravelAgent());
+await bar.RunAsync(new GeneralAssistant());

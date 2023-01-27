@@ -92,6 +92,12 @@ public class RuleBuilder<T>
         return this;
     }
 
+    public RuleBuilder<T> Do(Action<BotInput, T> action)
+    {
+        _botRule.PreActions.Add(action);
+        return this;
+    }
+
     /// <summary>
     /// Set post action, which will be executed after if pattern matches
     /// </summary>

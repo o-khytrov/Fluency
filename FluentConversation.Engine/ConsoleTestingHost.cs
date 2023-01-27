@@ -1,4 +1,5 @@
 using FluentConversation.Engine.Models;
+using Newtonsoft.Json;
 
 namespace FluentConversation.Engine;
 
@@ -26,7 +27,17 @@ public class ConsoleTestingHost
                 break;
             }
 
-            var userMessage = new UserMessage() { Text = input };
+            UserMessage userMessage;
+            try
+            {
+                userMessage = JsonConvert.DeserializeObject<UserMessage>(input);
+            }
+            catch (Exception)
+            {
+                userMessage = new UserMessage
+                    { Text = input };
+            }
+
             var output = await _chatEngine.PerformChatAsync(bot, userMessage, username);
 
             var color = Console.ForegroundColor;

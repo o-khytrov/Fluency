@@ -8,7 +8,8 @@ public class BotRule<T>
 {
     public List<Func<T, BotInput, bool>> Conditions { get; set; } = new();
 
-    public List<Action<T, PatternMatchingResult>> PostActions = new();
+    public readonly List<Action<T, PatternMatchingResult>> PostActions = new();
+    public List<Action<BotInput, T>> PreActions = new();
 
     public Pattern? Pattern { get; set; }
 
