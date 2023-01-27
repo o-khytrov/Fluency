@@ -30,7 +30,7 @@ public class ChatEngine
         var botMessage = new BotMessage();
         var botInput = new BotInput(userMessage.Text, userMessage.Variables);
         botInput.Document = _tokenizer.Tokenize(botInput.RawInput).ToTokenList();
-        foreach (var rule in bot.BotRules)
+        foreach (var rule in bot.DefaultTopic.BotRules)
         {
             if (conversation.RuleShown.Contains(rule) && !rule.Keep)
             {

@@ -16,4 +16,4 @@ var serviceProvider = new ServiceCollection()
     .BuildServiceProvider();
 
 var bar = serviceProvider.GetRequiredService<ConsoleTestingHost>();
-await bar.RunAsync(new TravelBot.TravelBot());
+await bar.RunAsync(new TravelBot.TravelAgent());

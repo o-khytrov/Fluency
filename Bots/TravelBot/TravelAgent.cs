@@ -3,13 +3,13 @@ using Mosaik.Core;
 
 namespace TravelBot;
 
-public class TravelBot : Bot<TravelBotContext>
+public class TravelAgent : Bot<TravelBotContext>
 {
     public override Language Language => Language.English;
 
     public override string Name => "Travel agent";
 
-    public TravelBot()
+    public TravelAgent()
     {
         var greetings = new[] { "Hello", "Hi", "Hey" };
 
@@ -26,6 +26,7 @@ public class TravelBot : Bot<TravelBotContext>
             .Then((x, m) => x.Source = m[0])
             .Output(c => $"Ok you are in {c.Source}")
             .Keep();
+        
 
         R("TARGET")
             .Pattern(x =>

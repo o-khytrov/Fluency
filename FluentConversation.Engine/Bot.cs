@@ -9,7 +9,9 @@ public abstract class Bot<T>
 
     public abstract string Name { get; }
 
-    public List<BotRule<T>> BotRules { get; set; } = new();
+    public Topic<T> DefaultTopic { get; set; } = new();
+
+    public List<Topic<T>> Topics { get; set; } = new() { new Topic<T>() { Name = "Default" } };
 
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
@@ -20,8 +22,17 @@ public abstract class Bot<T>
         {
             Name = name
         };
-        BotRules.Add(rule);
+        DefaultTopic.BotRules.Add(rule);
         return new RuleBuilder<T>(rule);
+    }
+
+    public void Topic(string name, Action action)
+    {
+        var rule = new BotRule<T>
+        {
+            Name = name
+        };
+        DefaultTopic.BotRules.Add(rule);
     }
 
 
