@@ -1,13 +1,17 @@
+using Catalyst;
 using FluentConversation.Engine.Models;
+using FluentConversation.Engine.PatternSystem;
+using Microsoft.Extensions.DependencyInjection;
+using Mosaik.Core;
 using Newtonsoft.Json;
 
 namespace FluentConversation.Engine;
 
-public class ConsoleTestingHost
+public class ConsolePlayground
 {
     private readonly ChatEngine _chatEngine;
 
-    public ConsoleTestingHost(ChatEngine chatEngine)
+    public ConsolePlayground(ChatEngine chatEngine)
     {
         _chatEngine = chatEngine;
     }
@@ -46,5 +50,21 @@ public class ConsoleTestingHost
             Console.WriteLine(output.Text);
             Console.ForegroundColor = color;
         }
+    }
+
+    public static ConsolePlayground Build()
+    {
+        Catalyst.Models.English.Register();
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton<PatternEngine>()
+            .AddSingleton<ChatEngine>()
+            .AddSingleton(Pipeline.For(Language.English))
+            .AddSingleton<IChatContextStorage, InMemoryChatContextStorage>()
+            .AddSingleton<Tokenizer>()
+            .AddSingleton<ConsolePlayground>()
+            .BuildServiceProvider();
+
+        var consoleTestingHost = serviceProvider.GetRequiredService<ConsolePlayground>();
+        return consoleTestingHost;
     }
 }

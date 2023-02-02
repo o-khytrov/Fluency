@@ -1,3 +1,4 @@
+using System.Xml;
 using FluentConversation.Engine;
 using Mosaik.Core;
 
@@ -15,6 +16,8 @@ public class GeneralContext
     public string Category { get; set; } = string.Empty;
 
     public string Specialty { get; set; } = string.Empty;
+
+    public string Symptom { get; set; } = string.Empty;
 
     public string QuestionType { get; set; } = "important";
 
@@ -53,5 +56,10 @@ public class GeneralAssistant : Bot<GeneralContext>
                 }
             })
             .Output(c => $"Hello. How can I help you with your {c.QuestionType} question?. Our {c.ExpertName} can help you");
+
+        R("GLEAN_SYMPTOM_CLOCK")
+            .When((x, i) => x.Specialty == "clock_repair")
+            .Pattern(x => x.Word(""))
+            .Then((x, m) => x.Symptom = "clock");
     }
 }
