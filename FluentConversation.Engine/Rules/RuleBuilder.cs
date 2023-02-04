@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using FluentConversation.Engine.PatternSystem;
 using FluentConversation.Engine.PatternSystem.Elements;

@@ -22,6 +22,15 @@ public class ChatEngine
         _patternEngine = patternEngine;
     }
 
+    /// <summary>
+    /// If conversation exists for a given username, erase conversation from the storage if 
+    /// </summary>
+    /// <param name="username"></param>
+    public async Task RestartConversation(string username)
+    {
+        await _chatContextStorage.DeleteConversation(username);
+    }
+
 
     public async Task<BotMessage> PerformChatAsync<T>(Bot<T> bot, UserMessage userMessage, string username) where T : new()
     {

@@ -5,7 +5,7 @@ namespace FluentConversation.Engine.PatternSystem;
 
 public class PatternEngine
 {
-    private Tokenizer _tokenizer;
+    private readonly Tokenizer _tokenizer;
 
     public PatternEngine(Tokenizer tokenizer)
     {

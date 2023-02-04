@@ -1,5 +1,5 @@
-﻿using FluentConversation.Engine;
+﻿using FluentConversation.Engine.Playground;
 using TravelBot.GeneralBot;
 
-var testingConsole = ConsolePlayground.Build();
+var testingConsole = ConsolePlayground.Build(username: "Oleksandr");
 await testingConsole.RunAsync(new GeneralAssistant());
