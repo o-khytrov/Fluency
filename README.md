@@ -69,3 +69,9 @@ public class TravelBot : Bot<TravelBotContext>
             .Pattern(x => x.Word("What").Word("do").Word("I", "we").Word("want", "desire"))
             .Output((c) => $"You want to go from {c.Source} to {c.Target}"); 
 ```
+To test the bot create a console app, in main method add
+
+```csharp
+var testingConsole = ConsolePlayground.Build(username: "Oleksandr");
+await testingConsole.RunAsync(new GeneralAssistant());
+```
