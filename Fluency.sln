@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentConversation.Playground", "FluentConversation.Playground\FluentConversation.Playground.csproj", "{AF6E4DAF-E397-495D-9D11-8AE863F148AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Playground", "Fluency.Playground\Fluency.Playground.csproj", "{AF6E4DAF-E397-495D-9D11-8AE863F148AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentConversation.Engine", "FluentConversation.Engine\FluentConversation.Engine.csproj", "{D41C3600-95B5-4A6D-A2EA-C07526E790B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Engine", "Fluency.Engine\Fluency.Engine.csproj", "{D41C3600-95B5-4A6D-A2EA-C07526E790B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelBot", "Bots\TravelBot\TravelBot.csproj", "{7276C501-2C2A-4C41-AD2B-DD3601792049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentConversation.Tests", "FluentConversation.Tests\FluentConversation.Tests.csproj", "{416E3071-55FA-4182-982C-AD9ADB58471F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Tests", "Fluency.Tests\Fluency.Tests.csproj", "{416E3071-55FA-4182-982C-AD9ADB58471F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalBot", "Bots\MedicalBot\MedicalBot.csproj", "{827ADD26-8C24-48FB-9920-0DB33CE0EED8}"
 EndProject
@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bots", "Bots", "{77B57DD8-4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelBot.Tests", "Bots\TravelBot.Tests\TravelBot.Tests.csproj", "{3D9DA739-CD40-477E-A22B-F816E58176EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentConversation.Testing", "FluentConversation.Testing\FluentConversation.Testing.csproj", "{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Testing", "Fluency.Testing\Fluency.Testing.csproj", "{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{17BE27A1-E999-4491-A243-0FB3FFE22B3A}"
 	ProjectSection(SolutionItems) = preProject

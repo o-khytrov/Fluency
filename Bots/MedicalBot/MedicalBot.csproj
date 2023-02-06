@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\FluentConversation.Playground\FluentConversation.Playground.csproj" />
+      <ProjectReference Include="..\..\Fluency.Playground\Fluency.Playground.csproj" />
     </ItemGroup>
 
 </Project>

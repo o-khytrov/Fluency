@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\FluentConversation.Testing\FluentConversation.Testing.csproj" />
+      <ProjectReference Include="..\..\Fluency.Testing\Fluency.Testing.csproj" />
       <ProjectReference Include="..\TravelBot\TravelBot.csproj" />
     </ItemGroup>
 

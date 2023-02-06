@@ -1,13 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>FluentConversation.Playground</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FluentConversation.Engine\FluentConversation.Engine.csproj" />
+      <ProjectReference Include="..\Bots\TravelBot\TravelBot.csproj" />
+      <ProjectReference Include="..\Fluency.Engine\Fluency.Engine.csproj" />
     </ItemGroup>
-
 </Project>
