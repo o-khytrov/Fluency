@@ -11,6 +11,14 @@ namespace ConversationDesigner.Tests;
 
 public class TokenizerTests
 {
+    private readonly Tokenizer _tokenizer;
+
+    public TokenizerTests()
+    {
+        Catalyst.Models.English.Register();
+        _tokenizer = new Tokenizer(Pipeline.For(Language.English));
+    }
+
     [Theory]
     [InlineData("I am at Sumy", "Sumy")]
     [InlineData("Today We are in Sumy", "Sumy")]
@@ -18,7 +26,7 @@ public class TokenizerTests
     {
         var patternBuilder = new PatternBuilder();
         patternBuilder.Word("I", "we").Word("am", "are").Word("at", "in").Wildcard();
-        var patternEngine = new PatternEngine(new Tokenizer(Pipeline.For(Language.English)));
+        var patternEngine = new PatternEngine(_tokenizer);
         var result = patternEngine.Match(patternBuilder.Build(), new BotInput(input));
         Assert.True(result.Match);
 

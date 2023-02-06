@@ -8,6 +8,8 @@ public class BotRule<T>
 {
     public List<Func<T, BotInput, bool>> Conditions { get; set; } = new();
 
+    public string NexTopic { get; set; }
+
     public readonly List<Action<T, PatternMatchingResult>> PostActions = new();
     public List<Action<BotInput, T>> PreActions = new();
 
@@ -17,7 +19,7 @@ public class BotRule<T>
 
     public List<RuleTest> Tests { get; set; } = new();
 
-    public List<BotRule<T>> Rejoinders = new();
+    public readonly List<BotRule<T>> Rejoinders = new();
 
     public bool Keep { get; set; }
 

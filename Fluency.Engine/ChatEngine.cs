@@ -35,14 +35,15 @@ public class ChatEngine
 
     public async Task<BotMessage> PerformChatAsync<T>(Bot<T> bot, UserMessage userMessage, string username) where T : new()
     {
-        var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>() { UserId = username };
+        var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>()
+            { UserId = username, CurrentTopic = Constants.DefaultTopic };
         conversation.Messages.Add(userMessage);
         var botMessage = new BotMessage();
         var botInput = new BotInput(userMessage.Text, userMessage.Variables);
         botInput.Document = _tokenizer.Tokenize(botInput.RawInput).ToTokenList();
         var rules = new List<BotRule<T>>();
         rules.AddRange(conversation.PendingRejoinders);
-        rules.AddRange(bot.DefaultTopic.BotRules);
+        rules.AddRange(bot.GetTopic(conversation.CurrentTopic).BotRules);
         foreach (var rule in rules)
         {
             if (conversation.RuleShown.Contains(rule) && !rule.Keep)
@@ -77,6 +78,11 @@ public class ChatEngine
                     if (rule.Rejoinders.Any())
                     {
                         conversation.PendingRejoinders.AddRange(rule.Rejoinders);
+                    }
+
+                    if (!string.IsNullOrEmpty(rule.NexTopic) && bot.HasTopic(rule.NexTopic))
+                    {
+                        conversation.CurrentTopic = rule.NexTopic;
                     }
 
                     conversation.RuleShown.Add(rule);

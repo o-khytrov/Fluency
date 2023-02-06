@@ -1,3 +1,4 @@
+using Catalyst;
 using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine.PatternSystem.Elements;
@@ -7,6 +8,13 @@ public class SingleWordPatternElement : PatternElement
     public string? Value { get; set; }
 
     public bool Lemma { get; set; }
+
+    private readonly Func<IToken, bool>? _predicate;
+
+    public SingleWordPatternElement(Func<IToken, bool>? predicate = null)
+    {
+        _predicate = predicate;
+    }
 
     public StringComparison StringComparison { get; set; } = StringComparison.OrdinalIgnoreCase;
 
@@ -19,6 +27,10 @@ public class SingleWordPatternElement : PatternElement
 
         var token = input.Current;
         var isMatch = MemoryExtensions.Equals(Value, Lemma ? token.Lemma : token.ValueAsSpan, StringComparison);
+        if (_predicate is not null)
+        {
+            isMatch = _predicate(token);
+        }
 
         return isMatch;
     }

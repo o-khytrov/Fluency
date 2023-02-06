@@ -60,6 +60,21 @@ public class PatternBuilder
     }
 
     /// <summary>
+    /// Match single word
+    /// </summary>
+    /// <param name="word"></param>
+    /// <param name="predicate"></param>
+    /// <returns></returns>
+    public PatternBuilder Word(string word, Func<IToken, bool> predicate)
+    {
+        _pattern.Elements.Add(new SingleWordPatternElement(predicate)
+        {
+            PatternElementType = PatternElementType.Word, Value = word.Trim(),
+        });
+        return this;
+    }
+
+    /// <summary>
     /// Match one one provided words 
     /// </summary>
     /// <param name="words"></param>

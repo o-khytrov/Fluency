@@ -9,9 +9,7 @@ public abstract class Bot<T>
 
     public abstract string Name { get; }
 
-    public Topic<T> DefaultTopic { get; set; } = new();
-
-    public List<Topic<T>> Topics { get; set; } = new() { new Topic<T>() { Name = "Default" } };
+    protected Dictionary<string, Topic<T>> Topics { get; set; } = new();
 
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
@@ -31,17 +29,36 @@ public abstract class Bot<T>
             Keep = keep,
             Repeat = repeat
         };
-        DefaultTopic.BotRules.Add(rule);
-        return new RuleBuilder<T>(rule, DefaultTopic);
+        if (!Topics.ContainsKey(Constants.DefaultTopic))
+        {
+            Topics.Add(Constants.DefaultTopic, new Topic<T>(Constants.DefaultTopic));
+        }
+
+        var topic = Topics[Constants.DefaultTopic];
+        topic.BotRules.Add(rule);
+        return new RuleBuilder<T>(rule, topic);
     }
 
-    public void Topic(string name, Action action)
+    protected void Topic(string name, Action action, bool keep = false, bool repeat = false)
     {
-        var rule = new BotRule<T>
+        if (!Topics.ContainsKey(name))
         {
-            Name = name
-        };
-        DefaultTopic.BotRules.Add(rule);
+            Topics.Add(name, new Topic<T>(name));
+        }
+
+        var tempContainer = new List<BotRule<T>>();
+        using (Topics[Constants.DefaultTopic].BotRules.Capture(tempContainer.Add))
+        {
+            action();
+        }
+
+        foreach (var rule in tempContainer)
+        {
+            rule.Keep = keep;
+            rule.Repeat = repeat;
+        }
+
+        Topics[name].BotRules.AddRange(tempContainer);
     }
 
 
@@ -55,5 +72,15 @@ public abstract class Bot<T>
     {
         var index = new Random().Next(0, words.Length);
         return words[index];
+    }
+    
+    public bool HasTopic(string topicName)
+    {
+        return Topics.ContainsKey(topicName);
+    }
+
+    public Topic<T> GetTopic(string topicName)
+    {
+        return Topics[topicName];
     }
 }

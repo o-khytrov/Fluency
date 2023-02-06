@@ -105,6 +105,11 @@ public class RuleBuilder<T>
         return this;
     }
 
+    public void NexTopic(string topicName)
+    {
+        _botRule.NexTopic = topicName;
+    }
+
     public void Rejoinder(Action action)
     {
         var dependencyContainer = new List<BotRule<T>>();
@@ -155,6 +160,8 @@ public interface IRuleBuilderFinalStage<T>
     /// </summary>
     /// <param name="action"></param>
     public void Rejoinder(Action action);
+
+    public void NexTopic(string topicName);
 }
 
 public interface IRuleBuilderOutputStage<T>

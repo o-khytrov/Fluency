@@ -11,6 +11,13 @@ public class TravelAgent : Bot<TravelBotContext>
 
     public TravelAgent()
     {
+        AddDefaultTopic();
+
+        AddWeatherTopic();
+    }
+
+    private void AddDefaultTopic()
+    {
         var greetings = new[] { "Hello", "Hi", "Hey" };
 
         R("Hello")
@@ -52,7 +59,7 @@ public class TravelAgent : Bot<TravelBotContext>
         R("CONFIRMATION")
             .When((x, i) => x.Source is not null && x.Target is not null)
             .Pattern(x => x.Word("What").Word("do").Word("I", "we").Word("want", "desire"))
-            .Output((c) => $"You want to go from {c.Source} to {c.Target}")
+            .Output(c => $"You want to go from {c.Source} to {c.Target}")
             .Rejoinder(() =>
             {
                 R("THANK")
@@ -68,5 +75,20 @@ public class TravelAgent : Bot<TravelBotContext>
                     })
                     .Output("Sorry. Let's start it from the beginning");
             });
+        
+        R("Weather")
+            .Pattern(x=>x.Word("Weather"))
+            .Output("Ok, lets talk about the weather")
+            .NexTopic("Weather");
+    }
+
+    private void AddWeatherTopic()
+    {
+        Topic("Weather", () =>
+        {
+            R("Temperature")
+                .Pattern(x => x.Word("temperature"))
+                .Output(c => "The temperature in today is 15 degrees");
+        });
     }
 }
