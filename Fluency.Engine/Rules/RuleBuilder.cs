@@ -9,10 +9,13 @@ public class RuleBuilder<T>
 {
     private static readonly Func<BotInput, bool> DefaultCondition = x => true;
     private readonly BotRule<T> _botRule;
+    private Topic<T> _topic;
 
-    public RuleBuilder(BotRule<T> botRule)
+
+    public RuleBuilder(BotRule<T> botRule, Topic<T> parent)
     {
         _botRule = botRule;
+        _topic = parent;
     }
 
     /// <summary>
@@ -116,8 +119,6 @@ public class RuleBuilder<T>
 
     public RuleBuilder<T> Output(Func<T, string> outputRenderer)
     {
-        //_botRule.Output = ;
-
         _botRule.RenderOutput = outputRenderer;
         return this;
     }
@@ -126,5 +127,17 @@ public class RuleBuilder<T>
     {
         _botRule.Tests.Add(new RuleTest() { Input = input, ExpectedResponse = expectedResponse });
         return this;
+    }
+
+    public void Rejoinder(Action action)
+    {
+        var dependencyContainer = new List<BotRule<T>>();
+        // Capture any rules added to the parent validator inside this delegate.
+        using (_topic.BotRules.Capture(dependencyContainer.Add))
+        {
+            action();
+        }
+
+        _botRule.Rejoinders.AddRange(dependencyContainer);
     }
 }

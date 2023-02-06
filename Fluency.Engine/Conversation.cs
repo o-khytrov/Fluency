@@ -7,6 +7,8 @@ public class Conversation<T> where T : new()
 {
     public List<BotRule<T>> RuleShown { get; set; } = new();
 
+    public List<BotRule<T>> PendingRejoinders { get; set; } = new();
+
     public T Context { get; set; } = new();
 
     public List<Message> Messages { get; set; } = new();

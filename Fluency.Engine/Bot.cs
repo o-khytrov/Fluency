@@ -23,7 +23,7 @@ public abstract class Bot<T>
             Name = name
         };
         DefaultTopic.BotRules.Add(rule);
-        return new RuleBuilder<T>(rule);
+        return new RuleBuilder<T>(rule, DefaultTopic);
     }
 
     public void Topic(string name, Action action)

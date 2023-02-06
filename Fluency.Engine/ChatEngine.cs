@@ -1,5 +1,6 @@
 using Fluency.Engine.Models;
 using Fluency.Engine.PatternSystem;
+using Fluency.Engine.Rules;
 using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine;
@@ -39,7 +40,10 @@ public class ChatEngine
         var botMessage = new BotMessage();
         var botInput = new BotInput(userMessage.Text, userMessage.Variables);
         botInput.Document = _tokenizer.Tokenize(botInput.RawInput).ToTokenList();
-        foreach (var rule in bot.DefaultTopic.BotRules)
+        var rules = new List<BotRule<T>>();
+        rules.AddRange(conversation.PendingRejoinders);
+        rules.AddRange(bot.DefaultTopic.BotRules);
+        foreach (var rule in rules)
         {
             if (conversation.RuleShown.Contains(rule) && !rule.Keep)
             {
@@ -69,6 +73,12 @@ public class ChatEngine
 
                 if (isMatch)
                 {
+                    conversation.PendingRejoinders.Clear();
+                    if (rule.Rejoinders.Any())
+                    {
+                        conversation.PendingRejoinders.AddRange(rule.Rejoinders);
+                    }
+
                     conversation.RuleShown.Add(rule);
                     botMessage.RuleName = rule.Name;
                     botMessage.Text = rule.RenderOutput(conversation.Context);

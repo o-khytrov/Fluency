@@ -52,6 +52,21 @@ public class TravelAgent : Bot<TravelBotContext>
         R("CONFIRMATION")
             .When((x, i) => x.Source is not null && x.Target is not null)
             .Pattern(x => x.Word("What").Word("do").Word("I", "we").Word("want", "desire"))
-            .Output((c) => $"You want to go from {c.Source} to {c.Target}");
+            .Output((c) => $"You want to go from {c.Source} to {c.Target}")
+            .Rejoinder(() =>
+            {
+                R("THANK")
+                    .Pattern(x => x.Word("thank", "thanks"))
+                    .Output("you welcome");
+
+                R("WRONG")
+                    .Pattern(x => x.Word("wrong"))
+                    .Then((c, m) =>
+                    {
+                        c.Target = null;
+                        c.Source = null;
+                    })
+                    .Output("Sorry. Let's start it from the beginning");
+            });
     }
 }

@@ -17,6 +17,8 @@ public class BotRule<T>
 
     public List<RuleTest> Tests { get; set; } = new();
 
+    public List<BotRule<T>> Rejoinders = new();
+
     public bool Keep { get; set; }
 
     public bool Repeat { get; set; }
