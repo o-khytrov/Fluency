@@ -16,11 +16,20 @@ public abstract class Bot<T>
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
 
-    protected RuleBuilder<T> R(string? name = null)
+    /// <summary>
+    /// Create a rule, a rule which reacts to user input 
+    /// </summary>
+    /// <param name="name">Rule name</param>
+    /// <param name="keep"></param>
+    /// <param name="repeat">Allow same output multiple times</param>
+    /// <returns></returns>
+    protected IRuleBuilderInitialStage<T> R(string? name = null, bool keep = false, bool repeat = false)
     {
         var rule = new BotRule<T>
         {
-            Name = name
+            Name = name,
+            Keep = keep,
+            Repeat = repeat
         };
         DefaultTopic.BotRules.Add(rule);
         return new RuleBuilder<T>(rule, DefaultTopic);

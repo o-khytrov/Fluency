@@ -6,10 +6,14 @@ using Fluency.Engine.Tokenization;
 namespace Fluency.Engine.Rules;
 
 public class RuleBuilder<T>
+    : IRuleBuilderInitialStage<T>,
+        IRuleBuilderFinalStage<T>,
+        IRuleBuilderOutputStage<T>,
+        IIntermediateStageBuilder<T>
 {
     private static readonly Func<BotInput, bool> DefaultCondition = x => true;
     private readonly BotRule<T> _botRule;
-    private Topic<T> _topic;
+    private readonly Topic<T> _topic;
 
 
     public RuleBuilder(BotRule<T> botRule, Topic<T> parent)
@@ -18,34 +22,7 @@ public class RuleBuilder<T>
         _topic = parent;
     }
 
-    /// <summary>
-    /// Keep the rule after it has been played
-    /// </summary>
-    /// <param name="keep"></param>
-    /// <returns></returns>
-    public RuleBuilder<T> Keep(bool keep = true)
-    {
-        _botRule.Keep = keep;
-        return this;
-    }
-
-    /// <summary>
-    /// Allow same output multiple times
-    /// </summary>
-    /// <param name="repeat"></param>
-    /// <returns></returns>
-    public RuleBuilder<T> Repeat(bool repeat = true)
-    {
-        _botRule.Repeat = repeat;
-        return this;
-    }
-
-    public RuleBuilder<T> WithResponder(string output)
-    {
-        return this;
-    }
-
-    public RuleBuilder<T> Output(string output)
+    public IRuleBuilderFinalStage<T> Output(string output)
     {
         _botRule.RenderOutput = (x) => output;
         return this;
@@ -62,7 +39,7 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public RuleBuilder<T> Pattern(Action<PatternBuilder> patternBuilderAction)
+    public IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction)
     {
         var builder = new PatternBuilder();
         patternBuilderAction.Invoke(builder);
@@ -70,6 +47,10 @@ public class RuleBuilder<T>
         return this;
     }
 
+    public IRuleBuilderOutputStage<T> Always()
+    {
+        return this;
+    }
 
     public RuleBuilder<T> WithRegexPattern(string pattern, Action<MatchCollection> action)
     {
@@ -89,24 +70,19 @@ public class RuleBuilder<T>
     }
 
 
-    public RuleBuilder<T> When(Func<T, BotInput, bool> condition)
+    public IIntermediateStageBuilder<T> When(Func<T, BotInput, bool> condition)
     {
         _botRule.Conditions.Add(condition);
         return this;
     }
 
-    public RuleBuilder<T> Do(Action<BotInput, T> action)
+    public IIntermediateStageBuilder<T> Do(Action<BotInput, T> action)
     {
         _botRule.PreActions.Add(action);
         return this;
     }
 
-    /// <summary>
-    /// Set post action, which will be executed after if pattern matches
-    /// </summary>
-    /// <param name="postAction"></param>
-    /// <returns></returns>
-    public RuleBuilder<T> Then(Action<T, PatternMatchingResult> postAction)
+    public IRuleBuilderOutputStage<T> Then(Action<T, PatternMatchingResult> postAction)
     {
         _botRule.PostActions.Add(postAction);
         return this;
@@ -117,7 +93,7 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public RuleBuilder<T> Output(Func<T, string> outputRenderer)
+    public IRuleBuilderFinalStage<T> Output(Func<T, string> outputRenderer)
     {
         _botRule.RenderOutput = outputRenderer;
         return this;
@@ -140,4 +116,81 @@ public class RuleBuilder<T>
 
         _botRule.Rejoinders.AddRange(dependencyContainer);
     }
+}
+
+public interface IRuleBuilderInitialStage<T>
+{
+    /// <summary>
+    /// Defines an action which is always executed before evaluating precondition and pattern
+    /// </summary>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    IIntermediateStageBuilder<T> Do(Action<BotInput, T> action);
+
+    /// <summary>
+    /// Sets a precondition under which the rule will be executed is checked before the pattern is evaluated
+    /// </summary>
+    /// <param name="condition"></param>
+    /// <returns></returns>
+    IIntermediateStageBuilder<T> When(Func<T, BotInput, bool> condition);
+
+    /// <summary>
+    /// Builds a pipeline for pattern scanner
+    /// </summary>
+    /// <param name="patternBuilderAction"></param>
+    /// <returns></returns>
+    IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction);
+
+    /// <summary>
+    /// Skips all conditions
+    /// </summary>
+    /// <returns></returns>
+    IRuleBuilderOutputStage<T> Always();
+}
+
+public interface IRuleBuilderFinalStage<T>
+{
+    /// <summary>
+    /// Add nested rules aka 'Rejoinders'. They are used to anticipate how a user might respond to output and give direct feedback based on that response
+    /// </summary>
+    /// <param name="action"></param>
+    public void Rejoinder(Action action);
+}
+
+public interface IRuleBuilderOutputStage<T>
+{
+    /// <summary>
+    /// Set post action, which will be executed after if pattern matches
+    /// </summary>
+    /// <param name="postAction"></param>
+    /// <returns></returns>
+    IRuleBuilderOutputStage<T> Then(Action<T, PatternMatchingResult> postAction);
+
+    /// <summary>
+    /// Sets static output
+    /// </summary>
+    /// <param name="output"></param>
+    /// <returns></returns>
+    IRuleBuilderFinalStage<T> Output(string output);
+
+    /// <summary>
+    /// Sets function for rendering output
+    /// </summary>
+    /// <param name="outputRenderer"></param>
+    /// <returns></returns>
+    IRuleBuilderFinalStage<T> Output(Func<T, string> outputRenderer);
+}
+
+public interface IIntermediateStageBuilder<T>
+{
+    /// <summary>
+    /// Builds a pipeline for pattern scanner
+    /// </summary>
+    /// <param name="patternBuilderAction"></param>
+    /// <returns></returns>
+    IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction);
+
+    IRuleBuilderFinalStage<T> Output(string output);
+
+    IRuleBuilderFinalStage<T> Output(Func<T, string> outputRenderer);
 }

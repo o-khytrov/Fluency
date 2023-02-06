@@ -14,7 +14,8 @@ public class LegalBot : Bot<LegalConversationContext>
     public LegalBot()
     {
         R("LEGAL_START")
-            .When(LegalStartCondition).Output((c) => $"Welcome! How can I help with your {c.Topic} question?").Keep();
+            .When(LegalStartCondition)
+            .Output((c) => $"Welcome! How can I help with your {c.Topic} question?");
     }
 
     private bool LegalStartCondition(LegalConversationContext conversation, BotInput botInput)
