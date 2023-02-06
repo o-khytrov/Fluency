@@ -1,7 +1,7 @@
-using FluentConversation.Engine.Rules;
+using Fluency.Engine.Rules;
 using Mosaik.Core;
 
-namespace FluentConversation.Engine;
+namespace Fluency.Engine;
 
 public abstract class Bot<T>
 {

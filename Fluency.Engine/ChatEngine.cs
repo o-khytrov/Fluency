@@ -1,8 +1,8 @@
-using FluentConversation.Engine.Models;
-using FluentConversation.Engine.PatternSystem;
-using FluentConversation.Engine.Tokenization;
+using Fluency.Engine.Models;
+using Fluency.Engine.PatternSystem;
+using Fluency.Engine.Tokenization;
 
-namespace FluentConversation.Engine;
+namespace Fluency.Engine;
 
 public class ChatEngine
 {

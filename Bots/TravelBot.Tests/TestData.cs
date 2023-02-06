@@ -1,5 +1,5 @@
-using FluentConversation.Engine.Models;
-using FluentConversation.Testing;
+using Fluency.Engine.Models;
+using Fluency.Testing;
 using Xunit;
 
 namespace TravelBot.Tests;

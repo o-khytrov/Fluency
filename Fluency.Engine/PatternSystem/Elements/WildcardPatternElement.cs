@@ -1,7 +1,7 @@
 using Catalyst;
-using FluentConversation.Engine.Tokenization;
+using Fluency.Engine.Tokenization;
 
-namespace FluentConversation.Engine.PatternSystem.Elements;
+namespace Fluency.Engine.PatternSystem.Elements;
 
 public class WildcardPatternElement : PatternElement
 {

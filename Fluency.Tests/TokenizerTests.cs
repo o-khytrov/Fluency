@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Catalyst;
-using FluentConversation.Engine;
-using FluentConversation.Engine.PatternSystem;
-using FluentConversation.Engine.Tokenization;
+using Fluency.Engine;
+using Fluency.Engine.PatternSystem;
+using Fluency.Engine.Tokenization;
 using Microsoft.ML.Transforms.Text;
 using Mosaik.Core;
 using Xunit;

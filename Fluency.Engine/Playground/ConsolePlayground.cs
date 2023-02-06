@@ -1,12 +1,12 @@
 using Catalyst;
-using FluentConversation.Engine.Models;
-using FluentConversation.Engine.PatternSystem;
+using Fluency.Engine.Models;
+using Fluency.Engine.PatternSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Mosaik.Core;
 using Newtonsoft.Json;
 
-namespace FluentConversation.Engine.Playground;
+namespace Fluency.Engine.Playground;
 
 public class ConsolePlayground
 {

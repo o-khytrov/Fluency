@@ -1,6 +1,6 @@
-using FluentConversation.Engine.Models;
+using Fluency.Engine.Models;
 
-namespace FluentConversation.Testing;
+namespace Fluency.Testing;
 
 public class TestVolley
 {

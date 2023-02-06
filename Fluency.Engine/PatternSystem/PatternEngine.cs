@@ -1,7 +1,7 @@
-using FluentConversation.Engine.PatternSystem.Elements;
-using FluentConversation.Engine.Tokenization;
+using Fluency.Engine.PatternSystem.Elements;
+using Fluency.Engine.Tokenization;
 
-namespace FluentConversation.Engine.PatternSystem;
+namespace Fluency.Engine.PatternSystem;
 
 public class PatternEngine
 {

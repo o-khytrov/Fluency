@@ -1,4 +1,4 @@
-namespace FluentConversation.Engine;
+namespace Fluency.Engine;
 
 public class Concept : List<string>
 {

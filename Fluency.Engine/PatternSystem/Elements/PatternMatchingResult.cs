@@ -1,4 +1,4 @@
-namespace FluentConversation.Engine.PatternSystem.Elements;
+namespace Fluency.Engine.PatternSystem.Elements;
 
 public class PatternMatchingResult
 {

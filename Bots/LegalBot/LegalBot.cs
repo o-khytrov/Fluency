@@ -1,5 +1,5 @@
-﻿using FluentConversation.Engine;
-using FluentConversation.Engine.Tokenization;
+﻿using Fluency.Engine;
+using Fluency.Engine.Tokenization;
 using Mosaik.Core;
 
 namespace LegalBot;

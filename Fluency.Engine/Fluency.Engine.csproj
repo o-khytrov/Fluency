@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>FluentConversation.Engine</RootNamespace>
+        <RootNamespace>Fluency.Engine</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,7 +14,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     </ItemGroup>
     <PropertyGroup>
-        <PackageId>FluentConverstaion</PackageId>
+        <PackageId>Fluency</PackageId>
         <Version>1.0.0</Version>
         <Authors>Oleksandr</Authors>
         <Company>JustAnswer</Company>

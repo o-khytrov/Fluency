@@ -1,7 +1,6 @@
-using System.Collections;
 using Catalyst;
 
-namespace FluentConversation.Engine.Tokenization;
+namespace Fluency.Engine.Tokenization;
 
 public class BotInput
 {

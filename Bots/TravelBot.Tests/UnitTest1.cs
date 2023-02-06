@@ -1,7 +1,4 @@
 using System.Threading.Tasks;
-using FluentConversation.Engine;
-using FluentConversation.Engine.PatternSystem;
-using FluentConversation.Testing;
 using Xunit;
 
 namespace TravelBot.Tests;

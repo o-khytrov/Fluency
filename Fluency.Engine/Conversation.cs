@@ -1,7 +1,7 @@
-using FluentConversation.Engine.Models;
-using FluentConversation.Engine.Rules;
+using Fluency.Engine.Models;
+using Fluency.Engine.Rules;
 
-namespace FluentConversation.Engine;
+namespace Fluency.Engine;
 
 public class Conversation<T> where T : new()
 {

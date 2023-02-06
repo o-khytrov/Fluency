@@ -1,6 +1,6 @@
-using FluentConversation.Engine.Rules;
+using Fluency.Engine.Rules;
 
-namespace FluentConversation.Engine;
+namespace Fluency.Engine;
 
 public class Topic<T>
 {

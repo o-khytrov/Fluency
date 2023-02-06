@@ -1,4 +1,4 @@
-# ConverstationDesigner
+# Fluency 
 
 Rule based chat bot engine inspired by  [ChatScript](https://github.com/ChatScript/ChatScript)
 

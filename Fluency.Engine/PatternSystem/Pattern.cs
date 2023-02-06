@@ -1,6 +1,6 @@
-using FluentConversation.Engine.PatternSystem.Elements;
+using Fluency.Engine.PatternSystem.Elements;
 
-namespace FluentConversation.Engine.PatternSystem;
+namespace Fluency.Engine.PatternSystem;
 
 public class Pattern
 {

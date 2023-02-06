@@ -1,8 +1,8 @@
-using FluentConversation.Engine.PatternSystem;
-using FluentConversation.Engine.PatternSystem.Elements;
-using FluentConversation.Engine.Tokenization;
+using Fluency.Engine.PatternSystem;
+using Fluency.Engine.PatternSystem.Elements;
+using Fluency.Engine.Tokenization;
 
-namespace FluentConversation.Engine.Rules;
+namespace Fluency.Engine.Rules;
 
 public class BotRule<T>
 {

@@ -1,4 +1,4 @@
-namespace FluentConversation.Engine.Playground;
+namespace Fluency.Engine.Playground;
 
 public class ConsolePlaygroundOptions
 {

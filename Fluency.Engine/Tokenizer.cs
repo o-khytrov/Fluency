@@ -1,7 +1,7 @@
 using Catalyst;
 using Mosaik.Core;
 
-namespace FluentConversation.Engine;
+namespace Fluency.Engine;
 
 public class Tokenizer
 {

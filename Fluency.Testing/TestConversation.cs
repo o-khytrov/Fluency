@@ -1,4 +1,4 @@
-﻿namespace FluentConversation.Testing;
+﻿namespace Fluency.Testing;
 
 public class TestConversation : List<TestVolley>
 {
