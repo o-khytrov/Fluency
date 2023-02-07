@@ -22,6 +22,12 @@ public class PartOfSpeechPatternElement : PatternElement
 
         var token = input.Current;
 
-        return token.POS == _partOfSpeech;
+        var isMatch = token.POS == _partOfSpeech;
+        if (isMatch)
+        {
+            extracted.Add(token.Value);
+        }
+
+        return isMatch;
     }
 }
