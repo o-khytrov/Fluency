@@ -74,6 +74,33 @@ public class PatternBuilder
         return this;
     }
 
+    public PatternBuilder Pos(PartOfSpeech partOfSpeech)
+    {
+        _pattern.Elements.Add(new PartOfSpeechPatternElement(partOfSpeech)
+        {
+            PatternElementType = PatternElementType.Word
+        });
+        return this;
+    }
+
+    public PatternBuilder Pronoun()
+    {
+        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.PRON)
+        {
+            PatternElementType = PatternElementType.Word
+        });
+        return this;
+    }
+
+    public PatternBuilder Noun()
+    {
+        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.NONE)
+        {
+            PatternElementType = PatternElementType.Word
+        });
+        return this;
+    }
+
     /// <summary>
     /// Match one one provided words 
     /// </summary>

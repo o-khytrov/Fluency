@@ -27,7 +27,7 @@ public class TravelAgent : Bot<TravelBotContext>
 
         R("SOURCE")
             .Pattern(x =>
-                x.Word("I", "we").Lemma("be").Word("at", "in").Wildcard())
+                x.Pronoun().Lemma("be").Word("at", "in").Wildcard())
             .Then((x, m) => x.Source = m[0])
             .Output(c => $"Ok you are in {c.Source}");
 
