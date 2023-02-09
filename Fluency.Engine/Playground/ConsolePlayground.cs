@@ -21,7 +21,17 @@ public class ConsolePlayground
         _options = options.Value;
     }
 
-    public async Task RunAsync<TB, TC>() where TB : Bot<TC> where TC : new()
+    public Task RunAsync<T>() where T : Bot
+    {
+        var typeOfContext = typeof(T).BaseType?.GenericTypeArguments
+                            ?? throw new ArgumentException("Type argument must derive from 'Bot'");
+        var internalMethod = GetType().GetMethod(nameof(InternalRunAsync));
+        return (Task) internalMethod!
+            .MakeGenericMethod(typeof(T), typeOfContext[0])
+            .Invoke(this, new object[] { })!;
+    }
+
+    public async Task InternalRunAsync<TB, TC>() where TB : Bot<TC> where TC : new()
 
     {
         Console.WriteLine("Engine created...");

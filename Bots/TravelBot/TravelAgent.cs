@@ -28,7 +28,7 @@ public class TravelAgent : Bot<TravelContext>
         R("SOURCE")
             .Pattern(x =>
                 x.Pronoun().Lemma("be").Word("at", "in").Wildcard())
-            .Then((x, m) => x.Source = m[0])
+            .Then((x, m) => x.Source = m[1])
             .Output(c => $"Ok you are in {c.Source}");
 
         R("TARGET")
@@ -75,9 +75,9 @@ public class TravelAgent : Bot<TravelContext>
                     })
                     .Output("Sorry. Let's start it from the beginning");
             });
-        
+
         R("Weather")
-            .Pattern(x=>x.Word("Weather"))
+            .Pattern(x => x.Word("Weather"))
             .Output("Ok, lets talk about the weather")
             .NexTopic("Weather");
     }

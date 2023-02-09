@@ -8,4 +8,4 @@ await new ServiceCollection()
     .AddFluency(x => x.AddBot<TravelAgent>())
     .BuildServiceProvider()
     .GetRequiredService<ConsolePlayground>()
-    .RunAsync<TravelAgent, TravelContext>();
+    .RunAsync<TravelAgent>();
