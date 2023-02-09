@@ -47,11 +47,6 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public IRuleBuilderOutputStage<T> Always()
-    {
-        return this;
-    }
-
     public RuleBuilder<T> WithRegexPattern(string pattern, Action<MatchCollection> action)
     {
         _botRule.Conditions.Add((context, input) =>
@@ -145,12 +140,6 @@ public interface IRuleBuilderInitialStage<T>
     /// <param name="patternBuilderAction"></param>
     /// <returns></returns>
     IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction);
-
-    /// <summary>
-    /// Skips all conditions
-    /// </summary>
-    /// <returns></returns>
-    IRuleBuilderOutputStage<T> Always();
 }
 
 public interface IRuleBuilderFinalStage<T>

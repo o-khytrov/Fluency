@@ -5,7 +5,12 @@ using TravelBot;
 
 
 await new ServiceCollection()
-    .AddFluency(x => x.AddBot<TravelAgent>())
+    .AddFluency(x =>
+        {
+            x.AddBot<TravelAgent>();
+            x.AddBot<Harry>();
+        }
+    )
     .BuildServiceProvider()
     .GetRequiredService<ConsolePlayground>()
-    .RunAsync<TravelAgent>();
+    .RunAsync<Harry>();

@@ -16,10 +16,22 @@ public abstract class Bot<T> : Bot
 
     public abstract string Name { get; }
 
-    protected Dictionary<string, Topic<T>> Topics { get; set; } = new();
+    private Dictionary<string, Topic<T>> Topics { get; set; } = new();
 
     public string ChatCompleteMessage { get; set; } = "Chat is completed";
 
+
+    /// <summary>
+    /// Create a gambit rule
+    /// </summary>
+    /// <param name="name">Rule name</param>
+    /// <param name="keep"></param>
+    /// <param name="repeat">Allow same output multiple times</param>
+    /// <returns></returns>
+    protected IRuleBuilderOutputStage<T> G(string? name = null, bool keep = false, bool repeat = false)
+    {
+        return CreateNewBootRule(name, keep, repeat);
+    }
 
     /// <summary>
     /// Create a rule, a rule which reacts to user input 
@@ -29,6 +41,11 @@ public abstract class Bot<T> : Bot
     /// <param name="repeat">Allow same output multiple times</param>
     /// <returns></returns>
     protected IRuleBuilderInitialStage<T> R(string? name = null, bool keep = false, bool repeat = false)
+    {
+        return CreateNewBootRule(name, keep, repeat);
+    }
+
+    private RuleBuilder<T> CreateNewBootRule(string? name, bool keep, bool repeat)
     {
         var rule = new BotRule<T>
         {
