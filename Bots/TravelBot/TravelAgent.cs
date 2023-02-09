@@ -3,7 +3,7 @@ using Mosaik.Core;
 
 namespace TravelBot;
 
-public class TravelAgent : Bot<TravelBotContext>
+public class TravelAgent : Bot<TravelContext>
 {
     public override Language Language => Language.English;
 

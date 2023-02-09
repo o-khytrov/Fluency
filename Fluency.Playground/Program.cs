@@ -1,5 +1,11 @@
-﻿using Fluency.Engine.Playground;
+﻿using Fluency.Engine;
+using Fluency.Engine.Playground;
+using Microsoft.Extensions.DependencyInjection;
 using TravelBot;
 
-var testingConsole = ConsolePlayground.Build(username: "Oleksandr");
-await testingConsole.RunAsync(new TravelAgent());
+
+var services = new ServiceCollection();
+services.AddFluency();
+services.AddSingleton<TravelAgent>();
+var testingConsole = services.BuildServiceProvider().GetRequiredService<ConsolePlayground>();
+await testingConsole.RunAsync<TravelAgent, TravelContext>();

@@ -1,6 +1,6 @@
 namespace TravelBot;
 
-public class TravelBotContext
+public class TravelContext
 {
     /// <summary>
     /// Current location of the user

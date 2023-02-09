@@ -12,17 +12,20 @@ public class ConsolePlayground
 {
     private readonly ChatEngine _chatEngine;
     private readonly ConsolePlaygroundOptions _options;
+    private readonly IServiceProvider _serviceProvider;
 
-    public ConsolePlayground(ChatEngine chatEngine, IOptions<ConsolePlaygroundOptions> options)
+    public ConsolePlayground(ChatEngine chatEngine, IOptions<ConsolePlaygroundOptions> options, IServiceProvider serviceProvider)
     {
         _chatEngine = chatEngine;
+        _serviceProvider = serviceProvider;
         _options = options.Value;
     }
 
-    public async Task RunAsync<T>(Bot<T> bot) where T : new()
+    public async Task RunAsync<TB, TC>() where TB : Bot<TC> where TC : new()
 
     {
         Console.WriteLine("Engine created...");
+        var bot = _serviceProvider.GetRequiredService<TB>();
 
         var username = !string.IsNullOrEmpty(_options.Username) ? _options.Username : AskUserName();
 
@@ -67,22 +70,5 @@ public class ConsolePlayground
         Console.WriteLine("What is your name?");
         var username = Console.ReadLine() ?? string.Empty;
         return username;
-    }
-
-    public static ConsolePlayground Build(string? username = null)
-    {
-        Catalyst.Models.English.Register();
-        var serviceProvider = new ServiceCollection()
-            .Configure<ConsolePlaygroundOptions>(x => x.Username = username)
-            .AddSingleton<PatternEngine>()
-            .AddSingleton<ChatEngine>()
-            .AddSingleton(Pipeline.For(Language.English))
-            .AddSingleton<IChatContextStorage, InMemoryChatContextStorage>()
-            .AddSingleton<Tokenizer>()
-            .AddSingleton<ConsolePlayground>()
-            .BuildServiceProvider();
-
-        var consoleTestingHost = serviceProvider.GetRequiredService<ConsolePlayground>();
-        return consoleTestingHost;
     }
 }
