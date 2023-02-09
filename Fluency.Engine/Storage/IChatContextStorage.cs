@@ -1,4 +1,4 @@
-namespace Fluency.Engine;
+namespace Fluency.Engine.Storage;
 
 public class InMemoryChatContextStorage : IChatContextStorage
 {

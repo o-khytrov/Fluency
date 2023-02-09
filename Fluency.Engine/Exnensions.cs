@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Catalyst;
 using Fluency.Engine.PatternSystem;
 using Fluency.Engine.Playground;
+using Fluency.Engine.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Mosaik.Core;
 
