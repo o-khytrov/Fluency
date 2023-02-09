@@ -43,7 +43,7 @@ public static class Extensions
 
     public interface IFluencyDependencyBuilder
     {
-        void AddBot<T>() where T : class;
+        void AddBot<T>() where T : Bot;
     }
 
     private class FluencyDependencyBuilder : IFluencyDependencyBuilder
@@ -55,7 +55,7 @@ public static class Extensions
             _serviceCollection = serviceCollection;
         }
 
-        public void AddBot<T>() where T : class
+        public void AddBot<T>() where T : Bot
         {
             _serviceCollection.AddSingleton<T>();
         }

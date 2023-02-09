@@ -3,8 +3,15 @@ using Mosaik.Core;
 
 namespace Fluency.Engine;
 
-public abstract class Bot<T>
+public abstract class Bot
 {
+    public abstract Type Type { get; }
+}
+
+public abstract class Bot<T> : Bot
+{
+    public override Type Type => typeof(T);
+
     public abstract Language Language { get; }
 
     public abstract string Name { get; }
@@ -73,7 +80,7 @@ public abstract class Bot<T>
         var index = new Random().Next(0, words.Length);
         return words[index];
     }
-    
+
     public bool HasTopic(string topicName)
     {
         return Topics.ContainsKey(topicName);
