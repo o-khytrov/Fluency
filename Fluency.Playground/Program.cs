@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using TravelBot;
 
 
-var services = new ServiceCollection();
-services.AddFluency();
-services.AddSingleton<TravelAgent>();
-var testingConsole = services.BuildServiceProvider().GetRequiredService<ConsolePlayground>();
-await testingConsole.RunAsync<TravelAgent, TravelContext>();
+await new ServiceCollection()
+    .AddFluency(x => x.AddBot<TravelAgent>())
+    .BuildServiceProvider()
+    .GetRequiredService<ConsolePlayground>()
+    .RunAsync<TravelAgent, TravelContext>();
