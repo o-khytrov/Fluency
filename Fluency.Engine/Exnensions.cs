@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Catalyst;
 using Fluency.Engine.PatternSystem;
 using Fluency.Engine.Playground;
@@ -8,14 +9,21 @@ namespace Fluency.Engine;
 
 public static class Extensions
 {
-    public static IServiceCollection AddFluency(this IServiceCollection serviceCollection)
+    [SuppressMessage("ReSharper.DPA", "DPA0003: Excessive memory allocations in LOH",
+        MessageId = "type: System.Byte[]; size: 51MB")]
+    private static Pipeline BuildPipeline()
+    {
+        return Pipeline.For(Language.English);
+    }
+
+    private static IServiceCollection AddFluency(this IServiceCollection serviceCollection)
     {
         Catalyst.Models.English.Register();
         serviceCollection
             .Configure<ConsolePlaygroundOptions>(x => x.Username = "user")
             .AddSingleton<PatternEngine>()
             .AddSingleton<ChatEngine>()
-            .AddSingleton(Pipeline.For(Language.English))
+            .AddSingleton(BuildPipeline())
             .AddSingleton<IChatContextStorage, InMemoryChatContextStorage>()
             .AddSingleton<Tokenizer>()
             .AddSingleton<ConsolePlayground>()
