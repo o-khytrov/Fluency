@@ -122,9 +122,9 @@ public class PatternBuilder
         return this;
     }
 
-    public PatternBuilder Wildcard(Action<IToken>? resultAction = null)
+    public PatternBuilder Wildcard(int number = 1, Action<IToken>? resultAction = null)
     {
-        _pattern.Elements.Add(new WildcardPatternElement(resultAction)
+        _pattern.Elements.Add(new WildcardPatternElement(number, resultAction)
         {
             PatternElementType = PatternElementType.Wildcard
         });
