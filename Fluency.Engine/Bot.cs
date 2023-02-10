@@ -1,4 +1,7 @@
+using Fluency.Engine.Models;
+using Fluency.Engine.PatternSystem;
 using Fluency.Engine.Rules;
+using Fluency.Engine.Tokenization;
 using Mosaik.Core;
 
 namespace Fluency.Engine;
@@ -8,7 +11,7 @@ public abstract class Bot
     public abstract Type Type { get; }
 }
 
-public abstract class Bot<T> : Bot
+public abstract class Bot<T> : Bot where T : ChatContext, new()
 {
     public override Type Type => typeof(T);
 
@@ -18,7 +21,7 @@ public abstract class Bot<T> : Bot
 
     private Dictionary<string, Topic<T>> Topics { get; set; } = new();
 
-    public string ChatCompleteMessage { get; set; } = "Chat is completed";
+    internal virtual string ChatCompleteMessage { get; set; } = "Chat is completed";
 
 
     /// <summary>
@@ -106,5 +109,81 @@ public abstract class Bot<T> : Bot
     public Topic<T> GetTopic(string topicName)
     {
         return Topics[topicName];
+    }
+
+    public virtual BotMessage? Control(PatternEngine scanner, Conversation<T> conversation, BotInput botInput)
+    {
+        if (conversation.PendingRejoinders.Any())
+        {
+            var response = Respond(scanner, conversation, conversation.PendingRejoinders, botInput);
+            if (response is not null)
+            {
+                return response;
+            }
+        }
+
+        var rules = new List<BotRule<T>>();
+        var topicRules = Topics[conversation.CurrentTopic].BotRules;
+        rules.AddRange(topicRules);
+
+        return Respond(scanner, conversation, rules, botInput);
+    }
+
+    private BotMessage? Respond(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules, BotInput botInput)
+    {
+        foreach (var rule in rules)
+        {
+            if (conversation.RuleShown.Contains(rule) && !rule.Keep)
+            {
+                continue;
+            }
+
+            foreach (var preAction in rule.PreActions)
+            {
+                preAction.Invoke(botInput, conversation.Context);
+            }
+
+            if (rule.IsPreConditionTrue(conversation.Context, botInput))
+            {
+                var isMatch = true;
+                if (rule.Pattern is not null)
+                {
+                    var matchingResult = scanner.Match(rule.Pattern, botInput);
+                    isMatch = matchingResult.Match;
+                    if (matchingResult.Match)
+                    {
+                        foreach (var postAction in rule.PostActions)
+                        {
+                            postAction(conversation.Context, matchingResult);
+                        }
+                    }
+                }
+
+                if (isMatch)
+                {
+                    conversation.PendingRejoinders.Clear();
+                    if (rule.Rejoinders.Any())
+                    {
+                        conversation.PendingRejoinders.AddRange(rule.Rejoinders);
+                    }
+
+                    if (!string.IsNullOrEmpty(rule.NexTopic) && HasTopic(rule.NexTopic))
+                    {
+                        conversation.CurrentTopic = rule.NexTopic;
+                    }
+
+                    conversation.RuleShown.Add(rule);
+
+                    var botMessage = new BotMessage
+                    {
+                        RuleName = rule.Name,
+                        Text = rule.RenderOutput(conversation.Context)
+                    };
+                    return botMessage;
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -34,71 +34,27 @@ public class ChatEngine
     }
 
 
-    public async Task<BotMessage> PerformChatAsync<T>(Bot<T> bot, UserMessage userMessage, string username) where T : new()
+    public async Task<BotMessage> PerformChatAsync<T>(Bot<T> bot, UserMessage userMessage, string username)
+        where T : ChatContext, new()
     {
         var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>()
             { UserId = username, CurrentTopic = Constants.DefaultTopic };
+        conversation.Input++;
         conversation.Messages.Add(userMessage);
-        var botMessage = new BotMessage();
         var botInput = new BotInput(userMessage.Text, userMessage.Variables);
         botInput.Document = _tokenizer.Tokenize(botInput.RawInput).ToTokenList();
         var rules = new List<BotRule<T>>();
         rules.AddRange(conversation.PendingRejoinders);
         rules.AddRange(bot.GetTopic(conversation.CurrentTopic).BotRules);
-        foreach (var rule in rules)
+        var botMessage = bot.Control(_patternEngine, conversation, botInput) ?? new BotMessage
         {
-            if (conversation.RuleShown.Contains(rule) && !rule.Keep)
-            {
-                continue;
-            }
+            Text = bot.ChatCompleteMessage
+        };
 
-            foreach (var preAction in rule.PreActions)
-            {
-                preAction.Invoke(botInput, conversation.Context);
-            }
-
-            if (rule.IsPreConditionTrue(conversation.Context, botInput))
-            {
-                var isMatch = true;
-                if (rule.Pattern is not null)
-                {
-                    var matchingResult = _patternEngine.Match(rule.Pattern, botInput);
-                    isMatch = matchingResult.Match;
-                    if (matchingResult.Match)
-                    {
-                        foreach (var postAction in rule.PostActions)
-                        {
-                            postAction(conversation.Context, matchingResult);
-                        }
-                    }
-                }
-
-                if (isMatch)
-                {
-                    conversation.PendingRejoinders.Clear();
-                    if (rule.Rejoinders.Any())
-                    {
-                        conversation.PendingRejoinders.AddRange(rule.Rejoinders);
-                    }
-
-                    if (!string.IsNullOrEmpty(rule.NexTopic) && bot.HasTopic(rule.NexTopic))
-                    {
-                        conversation.CurrentTopic = rule.NexTopic;
-                    }
-
-                    conversation.RuleShown.Add(rule);
-                    botMessage.RuleName = rule.Name;
-                    botMessage.Text = rule.RenderOutput(conversation.Context);
-                    conversation.Messages.Add(botMessage);
-                    await _chatContextStorage.SaveConversation(conversation);
-                    return botMessage;
-                }
-            }
-        }
-
-        botMessage.Text = bot.ChatCompleteMessage;
         conversation.Messages.Add(botMessage);
+        conversation.Response++;
         await _chatContextStorage.SaveConversation(conversation);
         return botMessage;
     }
+
 }

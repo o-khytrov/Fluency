@@ -31,7 +31,7 @@ public class ConsolePlayground
             .Invoke(this, new object[] { })!;
     }
 
-    public async Task InternalRunAsync<TB, TC>() where TB : Bot<TC> where TC : new()
+    public async Task InternalRunAsync<TB, TC>() where TB : Bot<TC> where TC : ChatContext, new()
 
     {
         Console.WriteLine("Engine created...");

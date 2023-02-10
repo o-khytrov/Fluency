@@ -3,7 +3,8 @@ using Mosaik.Core;
 
 namespace TravelBot;
 
-public class HarryChatContext
+
+public class HarryChatContext: ChatContext
 {
 }
 

@@ -2,7 +2,7 @@ using Fluency.Engine;
 
 namespace LegalBot;
 
-public class LegalConversationContext
+public class LegalConversationContext : ChatContext
 {
     public string? Specialty { get; set; }
 

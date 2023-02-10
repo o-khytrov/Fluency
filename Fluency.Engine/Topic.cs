@@ -12,4 +12,5 @@ public class Topic<T>
     internal TrackingCollection<BotRule<T>> BotRules { get; set; } = new();
 
     public string Name { get; set; }
+    
 }

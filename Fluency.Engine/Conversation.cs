@@ -16,4 +16,8 @@ public class Conversation<T> where T : new()
     public string UserId { get; set; } = string.Empty;
 
     public string CurrentTopic { get; set; }
+
+    public int Input { get; set; }
+
+    public int Response { get; set; }
 }
