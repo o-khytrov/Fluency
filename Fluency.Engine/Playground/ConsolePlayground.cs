@@ -1,9 +1,6 @@
-using Catalyst;
 using Fluency.Engine.Models;
-using Fluency.Engine.PatternSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Mosaik.Core;
 using Newtonsoft.Json;
 
 namespace Fluency.Engine.Playground;
@@ -13,8 +10,10 @@ public class ConsolePlayground
     private readonly ChatEngine _chatEngine;
     private readonly ConsolePlaygroundOptions _options;
     private readonly IServiceProvider _serviceProvider;
+    private readonly List<string> _history = new List<string>();
 
-    public ConsolePlayground(ChatEngine chatEngine, IOptions<ConsolePlaygroundOptions> options, IServiceProvider serviceProvider)
+    public ConsolePlayground(ChatEngine chatEngine, IOptions<ConsolePlaygroundOptions> options,
+        IServiceProvider serviceProvider)
     {
         _chatEngine = chatEngine;
         _serviceProvider = serviceProvider;
@@ -41,7 +40,9 @@ public class ConsolePlayground
 
         while (true)
         {
-            var input = Console.ReadLine() ?? string.Empty;
+            var input = ReadInput();
+
+
             if (input == ":exit")
             {
                 break;
@@ -75,10 +76,44 @@ public class ConsolePlayground
         }
     }
 
+    private string ReadInput(bool fromHistory = false)
+    {
+        string input;
+
+        var key = Console.ReadKey(false).Key;
+        if (fromHistory)
+        {
+            input = _history.Last();
+            Console.Write(Environment.NewLine);
+        }
+        else
+        {
+            if (key == ConsoleKey.UpArrow)
+            {
+                ClearCurrentConsoleLine();
+                Console.Write(_history.LastOrDefault());
+                return ReadInput(true);
+            }
+
+            input = key + Console.ReadLine();
+            _history.Add(input);
+        }
+
+        return input;
+    }
+
     private static string AskUserName()
     {
         Console.WriteLine("What is your name?");
         var username = Console.ReadLine() ?? string.Empty;
         return username;
+    }
+
+    public static void ClearCurrentConsoleLine()
+    {
+        int currentLineCursor = Console.CursorTop;
+        Console.SetCursorPosition(0, Console.CursorTop);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, currentLineCursor);
     }
 }
