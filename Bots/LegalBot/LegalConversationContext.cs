@@ -1,3 +1,5 @@
+using Fluency.Engine;
+
 namespace LegalBot;
 
 public class LegalConversationContext

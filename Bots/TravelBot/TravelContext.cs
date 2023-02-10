@@ -1,6 +1,8 @@
+using Fluency.Engine;
+
 namespace TravelBot;
 
-public class TravelContext
+public class TravelContext : ChatContext
 {
     /// <summary>
     /// Current location of the user

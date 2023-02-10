@@ -1,6 +1,8 @@
+using Fluency.Engine;
+
 namespace MedicalBot;
 
-public class MedicalBotContext
+public class MedicalBotContext : ChatContext
 {
     public string Speciality { get; set; } = string.Empty;
 

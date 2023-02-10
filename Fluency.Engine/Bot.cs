@@ -92,7 +92,7 @@ public abstract class Bot<T> : Bot
     }
 
 
-    public string OneOf(params string[] words)
+    protected string OneOf(params string[] words)
     {
         var index = new Random().Next(0, words.Length);
         return words[index];
