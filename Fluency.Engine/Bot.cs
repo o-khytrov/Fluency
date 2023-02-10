@@ -101,7 +101,7 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
         return words[index];
     }
 
-    public bool HasTopic(string topicName)
+    private bool HasTopic(string topicName)
     {
         return Topics.ContainsKey(topicName);
     }

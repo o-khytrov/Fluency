@@ -43,9 +43,6 @@ public class ChatEngine
         conversation.Messages.Add(userMessage);
         var botInput = new BotInput(userMessage.Text, userMessage.Variables);
         botInput.Document = _tokenizer.Tokenize(botInput.RawInput).ToTokenList();
-        var rules = new List<BotRule<T>>();
-        rules.AddRange(conversation.PendingRejoinders);
-        rules.AddRange(bot.GetTopic(conversation.CurrentTopic).BotRules);
         var botMessage = bot.Control(_patternEngine, conversation, botInput) ?? new BotMessage
         {
             Text = bot.ChatCompleteMessage
@@ -56,5 +53,4 @@ public class ChatEngine
         await _chatContextStorage.SaveConversation(conversation);
         return botMessage;
     }
-
 }
