@@ -25,8 +25,21 @@ public class Harry : Bot<HarryChatContext>
     public Harry()
     {
         G("DONT_KNOW", repeat: true, keep: true)
-            .Output("I don't know what to say.").NexTopic("introductions");
+            .Output("I don't know what to say.").NexTopic("keywordless");
 
+        Introductions();
+
+        Childhood();
+
+        Topic("keywordless", () =>
+        {
+            R("WHAT_IS", keep: true)
+                .Pattern(x => x.Word("what").Lemma("be").Wildcard(2));
+        });
+    }
+
+    private void Introductions()
+    {
         Topic("introductions", () =>
         {
             G("HELLO", keep: true)
@@ -52,7 +65,10 @@ public class Harry : Bot<HarryChatContext>
                 .Pattern(x => x.Phrase("what is your name"))
                 .Output("My name is Harry Potter!");
         });
+    }
 
+    private void Childhood()
+    {
         Topic("childhood", () =>
         {
             G()
