@@ -6,23 +6,30 @@ namespace Fluency.Engine.PatternSystem.Elements;
 public class WildcardPatternElement : PatternElement
 {
     private readonly Action<IToken>? _action;
+    private int _number;
 
-    public WildcardPatternElement(Action<IToken>? action = null)
+    public WildcardPatternElement(int number = 1, Action<IToken>? action = null)
     {
         _action = action;
+        _number = number;
     }
 
     public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
     {
-        if (!input.MoveNext())
+        for (int i = 0; i < _number; i++)
         {
-            return false;
+            if (!input.MoveNext())
+            {
+                return false;
+            }
+
+            var token = input.Current;
+
+            extracted.Add(token.Value);
+
+            _action?.Invoke(token);
         }
 
-        var token = input.Current;
-
-        extracted.Add(token.Value);
-        _action?.Invoke(token);
         return true;
     }
 }

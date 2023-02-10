@@ -11,8 +11,7 @@ public class SmarterMedical : Bot<MedicalBotContext>
 
     public SmarterMedical()
     {
-        R("MEDICAL_START")
-            .Always()
+        G("MEDICAL_START")
             .Output($"Welcome! How can I help you with your {QuestionType} question?");
 
         R("MEDICAL_THEME_RASH")
