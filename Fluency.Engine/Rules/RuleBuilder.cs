@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Fluency.Engine.PatternSystem;
 using Fluency.Engine.PatternSystem.Elements;
 using Fluency.Engine.Tokenization;
@@ -9,9 +8,10 @@ public class RuleBuilder<T>
     : IRuleBuilderInitialStage<T>,
         IRuleBuilderFinalStage<T>,
         IRuleBuilderOutputStage<T>,
-        IIntermediateStageBuilder<T>
+        IIntermediateStageBuilder<T>,
+        IGambitBuilder<T>
+    where T : ChatContext, new()
 {
-    private static readonly Func<BotInput, bool> DefaultCondition = x => true;
     private readonly BotRule<T> _botRule;
     private readonly Topic<T> _topic;
 
@@ -28,17 +28,6 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public RuleBuilder<T> WithRegexPattern(string pattern)
-    {
-        _botRule.Conditions.Add((c, input) =>
-        {
-            var regex = new Regex(pattern);
-            var matches = regex.Matches(input.RawInput);
-            return matches.Count > 0;
-        });
-        return this;
-    }
-
     public IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction)
     {
         var builder = new PatternBuilder();
@@ -47,27 +36,15 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public RuleBuilder<T> WithRegexPattern(string pattern, Action<MatchCollection> action)
-    {
-        _botRule.Conditions.Add((context, input) =>
-        {
-            var regex = new Regex(pattern);
-            var matches = regex.Matches(input.RawInput);
-            var isMatch = matches.Count > 0;
-            if (isMatch)
-            {
-                action(matches);
-            }
-
-            return isMatch;
-        });
-        return this;
-    }
-
-
     public IIntermediateStageBuilder<T> When(Func<T, BotInput, bool> condition)
     {
         _botRule.Conditions.Add(condition);
+        return this;
+    }
+
+    public IIntermediateStageBuilder<T> WhenConversation(Func<Conversation<T>, BotInput, bool> condition)
+    {
+        _botRule.ConversationConditions.Add(condition);
         return this;
     }
 
@@ -108,7 +85,7 @@ public class RuleBuilder<T>
     public void Rejoinder(Action action)
     {
         var dependencyContainer = new List<BotRule<T>>();
-        // Capture any rules added to the parent validator inside this delegate.
+        // Capture any rules added to the parent rule inside this delegate.
         using (_topic.BotRules.Capture(dependencyContainer.Add))
         {
             action();
@@ -118,7 +95,8 @@ public class RuleBuilder<T>
     }
 }
 
-public interface IRuleBuilderInitialStage<T>
+public interface IConditionBuilder<T>
+    where T : ChatContext, new()
 {
     /// <summary>
     /// Defines an action which is always executed before evaluating precondition and pattern
@@ -134,6 +112,17 @@ public interface IRuleBuilderInitialStage<T>
     /// <returns></returns>
     IIntermediateStageBuilder<T> When(Func<T, BotInput, bool> condition);
 
+    /// <summary>
+    /// Sets a precondition under which the rule will be executed is checked before the pattern is evaluated
+    /// </summary>
+    /// <param name="condition"></param>
+    /// <returns></returns>
+    IIntermediateStageBuilder<T> WhenConversation(Func<Conversation<T>, BotInput, bool> condition);
+}
+
+public interface IRuleBuilderInitialStage<T> : IConditionBuilder<T>
+    where T : ChatContext, new()
+{
     /// <summary>
     /// Builds a pipeline for pattern scanner
     /// </summary>
@@ -154,6 +143,7 @@ public interface IRuleBuilderFinalStage<T>
 }
 
 public interface IRuleBuilderOutputStage<T>
+    where T : ChatContext, new()
 {
     /// <summary>
     /// Set post action, which will be executed after if pattern matches
@@ -178,6 +168,7 @@ public interface IRuleBuilderOutputStage<T>
 }
 
 public interface IIntermediateStageBuilder<T>
+    where T : ChatContext, new()
 {
     /// <summary>
     /// Builds a pipeline for pattern scanner
@@ -186,7 +177,22 @@ public interface IIntermediateStageBuilder<T>
     /// <returns></returns>
     IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction);
 
+    /// <summary>
+    /// Sets static output
+    /// </summary>
+    /// <param name="output"></param>
+    /// <returns></returns>
     IRuleBuilderFinalStage<T> Output(string output);
 
+    /// <summary>
+    /// Sets function for rendering output
+    /// </summary>
+    /// <param name="outputRenderer"></param>
+    /// <returns></returns>
     IRuleBuilderFinalStage<T> Output(Func<T, string> outputRenderer);
+}
+
+public interface IGambitBuilder<T> : IRuleBuilderOutputStage<T>, IConditionBuilder<T>
+    where T : ChatContext, new()
+{
 }

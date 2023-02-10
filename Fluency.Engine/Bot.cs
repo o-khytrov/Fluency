@@ -31,9 +31,9 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
     /// <param name="keep"></param>
     /// <param name="repeat">Allow same output multiple times</param>
     /// <returns></returns>
-    protected IRuleBuilderOutputStage<T> G(string? name = null, bool keep = false, bool repeat = false)
+    protected IGambitBuilder<T> G(string? name = null, bool keep = false, bool repeat = false)
     {
-        return CreateNewBootRule(name, keep, repeat);
+        return CreateNewBootRule(name, RuleType.Gambit, keep, repeat);
     }
 
     /// <summary>
@@ -45,16 +45,17 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
     /// <returns></returns>
     protected IRuleBuilderInitialStage<T> R(string? name = null, bool keep = false, bool repeat = false)
     {
-        return CreateNewBootRule(name, keep, repeat);
+        return CreateNewBootRule(name, RuleType.Responder, keep, repeat);
     }
 
-    private RuleBuilder<T> CreateNewBootRule(string? name, bool keep, bool repeat)
+    private RuleBuilder<T> CreateNewBootRule(string? name, RuleType type, bool keep, bool repeat)
     {
         var rule = new BotRule<T>
         {
             Name = name,
             Keep = keep,
-            Repeat = repeat
+            Repeat = repeat,
+            Type = type
         };
         if (!Topics.ContainsKey(Constants.DefaultTopic))
         {
@@ -113,25 +114,69 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
 
     public virtual BotMessage? Control(PatternEngine scanner, Conversation<T> conversation, BotInput botInput)
     {
+        var responseCount = conversation.CurrentVolley.ResponseCount;
         if (conversation.PendingRejoinders.Any())
         {
-            var response = Respond(scanner, conversation, conversation.PendingRejoinders, botInput);
-            if (response is not null)
+            Respond(scanner, conversation, conversation.PendingRejoinders, botInput);
+        }
+
+        if (responseCount == conversation.CurrentVolley.ResponseCount)
+        {
+            Gambit(scanner, conversation, Topics[conversation.CurrentTopic].BotRules.ToList(), botInput);
+        }
+
+        if (responseCount == conversation.CurrentVolley.ResponseCount)
+        {
+            //Current topic tries to respond to this input
+            Respond(scanner, conversation, Topics[conversation.CurrentTopic], botInput);
+        }
+
+        // see if some other topic has keywords matching his input (given we have no response yet)
+        if (responseCount == conversation.CurrentVolley.ResponseCount)
+        {
+            var keywordsTopics = GetKeywordTopics(botInput);
+            foreach (var keywordTopic in keywordsTopics)
             {
-                return response;
+                Respond(scanner, conversation, keywordTopic, botInput);
+            }
+
+            if (responseCount != conversation.CurrentVolley.ResponseCount)
+            {
+                return FinishVolley(conversation);
             }
         }
 
-        var rules = new List<BotRule<T>>();
-        var topicRules = Topics[conversation.CurrentTopic].BotRules;
-        rules.AddRange(topicRules);
+        if (responseCount == conversation.CurrentVolley.ResponseCount)
+        {
+            return new BotMessage
+                { Text = "I don't know what to say" };
+        }
 
-        return Respond(scanner, conversation, rules, botInput);
+        return FinishVolley(conversation);
     }
 
-    private BotMessage? Respond(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules, BotInput botInput)
+    private void Gambit(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules, BotInput botInput)
     {
-        foreach (var rule in rules)
+        var gambit = rules.FirstOrDefault(x => x.Type == RuleType.Gambit
+                                               && (!conversation.RuleShown.Contains(x) || x.Keep)
+                                               && x.IsPreConditionTrue(conversation, botInput));
+        if (gambit is not null)
+        {
+            PushRejoinders(conversation, gambit);
+
+            conversation.RuleShown.Add(gambit);
+            conversation.CurrentVolley.AddOutput(gambit.RenderOutput(conversation.Context));
+        }
+    }
+
+    private void Respond(PatternEngine scanner, Conversation<T> conversation, Topic<T> topic, BotInput botInput)
+    {
+        Respond(scanner, conversation, topic.BotRules.ToList(), botInput);
+    }
+
+    private void Respond(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules, BotInput botInput)
+    {
+        foreach (var rule in rules.Where(x => x.Type == RuleType.Responder))
         {
             if (conversation.RuleShown.Contains(rule) && !rule.Keep)
             {
@@ -143,7 +188,7 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
                 preAction.Invoke(botInput, conversation.Context);
             }
 
-            if (rule.IsPreConditionTrue(conversation.Context, botInput))
+            if (rule.IsPreConditionTrue(conversation, botInput))
             {
                 var isMatch = true;
                 if (rule.Pattern is not null)
@@ -161,11 +206,7 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
 
                 if (isMatch)
                 {
-                    conversation.PendingRejoinders.Clear();
-                    if (rule.Rejoinders.Any())
-                    {
-                        conversation.PendingRejoinders.AddRange(rule.Rejoinders);
-                    }
+                    PushRejoinders(conversation, rule);
 
                     if (!string.IsNullOrEmpty(rule.NexTopic) && HasTopic(rule.NexTopic))
                     {
@@ -173,17 +214,33 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
                     }
 
                     conversation.RuleShown.Add(rule);
-
-                    var botMessage = new BotMessage
-                    {
-                        RuleName = rule.Name,
-                        Text = rule.RenderOutput(conversation.Context)
-                    };
-                    return botMessage;
+                    conversation.CurrentVolley.AddOutput(rule.RenderOutput(conversation.Context));
+                    return;
                 }
             }
         }
+    }
 
-        return null;
+    private static void PushRejoinders(Conversation<T> conversation, BotRule<T> rule)
+    {
+        conversation.PendingRejoinders.Clear();
+        if (rule.Rejoinders.Any())
+        {
+            conversation.PendingRejoinders.AddRange(rule.Rejoinders);
+        }
+    }
+
+    private IEnumerable<Topic<T>> GetKeywordTopics(BotInput input)
+    {
+        return Topics.Values;
+    }
+
+    private BotMessage FinishVolley(Conversation<T> conversation)
+    {
+        var botMessage = new BotMessage
+        {
+            Text = conversation.CurrentVolley.GetResponse()
+        };
+        return botMessage;
     }
 }

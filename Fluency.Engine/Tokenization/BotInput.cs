@@ -6,9 +6,11 @@ public class BotInput
 {
     private int _current;
 
-    public Dictionary<string, object>? Variables { get; }
+    private Dictionary<string, object>? Variables { get; }
 
-    public List<IToken>? Document { get; set; }
+    public Document ProcessedInput { get; set; }
+
+    private List<IToken>? TokenizedInput => ProcessedInput.ToTokenList();
 
     public string RawInput { get; }
 
@@ -32,7 +34,7 @@ public class BotInput
 
     public bool CanMoveNext()
     {
-        return _current < Document.Count - 1;
+        return _current < TokenizedInput.Count - 1;
     }
 
     public void Reset()
@@ -40,7 +42,7 @@ public class BotInput
         _current = -1;
     }
 
-    public IToken Current => Document[_current];
+    public IToken Current => TokenizedInput[_current];
 
     public object? TryGetVariable(string key, object? defaultValue = null)
     {

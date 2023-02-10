@@ -37,20 +37,37 @@ public class ChatEngine
     public async Task<BotMessage> PerformChatAsync<T>(Bot<T> bot, UserMessage userMessage, string username)
         where T : ChatContext, new()
     {
+        // Try find the conversation with the user in the storage. 
+        // If it is not found create a new one 
         var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>()
             { UserId = username, CurrentTopic = Constants.DefaultTopic };
+
         conversation.Input++;
         conversation.Messages.Add(userMessage);
-        var botInput = new BotInput(userMessage.Text, userMessage.Variables);
-        botInput.Document = _tokenizer.Tokenize(botInput.RawInput).ToTokenList();
+
+        // Prepare input for bot, tokenization and POS tagging  
+        var botInput = PrepareBotInput(userMessage);
+
+        conversation.BeginVolley();
+
+        //Run Control method of the bot and try get response
+        //If the bot is not responding return chat complete message
         var botMessage = bot.Control(_patternEngine, conversation, botInput) ?? new BotMessage
         {
             Text = bot.ChatCompleteMessage
         };
 
+        //Save the conversation in the storage
         conversation.Messages.Add(botMessage);
-        conversation.Response++;
+
         await _chatContextStorage.SaveConversation(conversation);
         return botMessage;
+    }
+
+    private BotInput PrepareBotInput(UserMessage userMessage)
+    {
+        var botInput = new BotInput(userMessage.Text, userMessage.Variables);
+        botInput.ProcessedInput = _tokenizer.Tokenize(botInput.RawInput);
+        return botInput;
     }
 }

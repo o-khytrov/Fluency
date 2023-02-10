@@ -3,8 +3,7 @@ using Mosaik.Core;
 
 namespace TravelBot;
 
-
-public class HarryChatContext: ChatContext
+public class HarryChatContext : ChatContext
 {
 }
 
@@ -25,9 +24,6 @@ public class Harry : Bot<HarryChatContext>
 
     public Harry()
     {
-        G("DONT_KNOW", repeat: true, keep: true)
-            .Output("I don't know what to say.").NexTopic("keywordless");
-
         Introductions();
 
         Childhood();
@@ -41,31 +37,32 @@ public class Harry : Bot<HarryChatContext>
 
     private void Introductions()
     {
-        Topic("introductions", () =>
-        {
-            G("HELLO", keep: true)
-                .Output(x => $"{OneOf("Welcome back", "Hello again", "Glad you come back", "Hi", "Hi again")}");
+        // will match on every return start of a conversation 
+        G("HELLO", keep: true)
+            .WhenConversation((x, i) => x.Input == 1)
+            .Output(x => $"{OneOf("Welcome back", "Hello again", "Glad you come back", "Hi", "Hi again")}");
 
-            G("WELCOME", keep: true)
-                .Output(x => "Welcome to Fluency");
+        // matches every time on startup of a new conversation
+        G("WELCOME", keep: true)
+            .WhenConversation((x, i) => x.Input == 0)
+            .Output(x => "Welcome to Fluency");
 
-            G("BEEN_HERE", keep: true)
-                .Output("Have you been here before?")
-                .Rejoinder(() =>
-                {
-                    R("BEEN_HERE_YES")
-                        .Pattern(x => x.Word("yes"))
-                        .Output("Welcome back!");
+        G("BEEN_HERE")
+            .Output("Have you been here before?")
+            .Rejoinder(() =>
+            {
+                R("BEEN_HERE_YES")
+                    .Pattern(x => x.Word("yes"))
+                    .Output("Welcome back!");
 
-                    R("BEEN_HERE_NO")
-                        .Pattern(x => x.Word("no"))
-                        .Output("Then welcome to your first time.");
-                });
+                R("BEEN_HERE_NO")
+                    .Pattern(x => x.Word("no"))
+                    .Output("Then welcome to your first time.");
+            });
 
-            R("WHAT_IS_YOU_NAME")
-                .Pattern(x => x.Phrase("what is your name"))
-                .Output("My name is Harry Potter!");
-        });
+        R("WHAT_IS_YOU_NAME")
+            .Pattern(x => x.Phrase("what is your name"))
+            .Output("My name is Harry Potter!");
     }
 
     private void Childhood()

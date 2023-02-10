@@ -10,7 +10,7 @@ public class ConsolePlayground
     private readonly ChatEngine _chatEngine;
     private readonly ConsolePlaygroundOptions _options;
     private readonly IServiceProvider _serviceProvider;
-    private readonly List<string> _history = new List<string>();
+    private readonly Stack<string> _history = new();
 
     public ConsolePlayground(ChatEngine chatEngine, IOptions<ConsolePlaygroundOptions> options,
         IServiceProvider serviceProvider)
@@ -76,28 +76,10 @@ public class ConsolePlayground
         }
     }
 
-    private string ReadInput(bool fromHistory = false)
+    private string ReadInput()
     {
-        string input;
-
-        var key = Console.ReadKey(false).Key;
-        if (fromHistory)
-        {
-            input = _history.Last();
-            Console.Write(Environment.NewLine);
-        }
-        else
-        {
-            if (key == ConsoleKey.UpArrow)
-            {
-                ClearCurrentConsoleLine();
-                Console.Write(_history.LastOrDefault());
-                return ReadInput(true);
-            }
-
-            input = key + Console.ReadLine();
-            _history.Add(input);
-        }
+        var input = Console.ReadLine() ?? string.Empty;
+        _history.Push(input);
 
         return input;
     }
@@ -109,7 +91,7 @@ public class ConsolePlayground
         return username;
     }
 
-    public static void ClearCurrentConsoleLine()
+    private static void ClearCurrentConsoleLine()
     {
         int currentLineCursor = Console.CursorTop;
         Console.SetCursorPosition(0, Console.CursorTop);
