@@ -24,7 +24,13 @@ public class RuleBuilder<T>
 
     public IRuleBuilderFinalStage<T> Output(string output)
     {
-        _botRule.RenderOutput = (x) => output;
+        _botRule.SetOutputRenderer((x) => output);
+        return this;
+    }
+
+    public IRuleBuilderFinalStage<T> Output(Func<T, string> outputRenderer)
+    {
+        _botRule.SetOutputRenderer(outputRenderer);
         return this;
     }
 
@@ -65,11 +71,6 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public IRuleBuilderFinalStage<T> Output(Func<T, string> outputRenderer)
-    {
-        _botRule.RenderOutput = outputRenderer;
-        return this;
-    }
 
     public RuleBuilder<T> WithTest(string input, string expectedResponse)
     {

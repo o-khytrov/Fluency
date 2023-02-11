@@ -213,8 +213,10 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
                         conversation.CurrentTopic = rule.NexTopic;
                     }
 
+                    var output = rule.RenderOutput(conversation.Context);
+                    if (string.IsNullOrWhiteSpace(output)) continue;
                     conversation.RuleShown.Add(rule);
-                    conversation.CurrentVolley.AddOutput(rule.RenderOutput(conversation.Context));
+                    conversation.CurrentVolley.AddOutput(output);
                     return;
                 }
             }

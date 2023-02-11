@@ -31,7 +31,8 @@ public class Harry : Bot<HarryChatContext>
         Topic("keywordless", () =>
         {
             R("WHAT_IS", keep: true)
-                .Pattern(x => x.Word("what").Lemma("be").Wildcard(2));
+                .Pattern(x => x.Word("what").Lemma("be").Wildcard(2))
+                .Output("This is something. I need to look at Wikipedia");
         });
     }
 

@@ -26,7 +26,18 @@ public class BotRule<T>
 
     public Pattern? Pattern { get; set; }
 
-    public Func<T, string> RenderOutput { get; set; }
+
+    private Func<T, string>? _renderOutput;
+
+    public string? RenderOutput(T context)
+    {
+        if (_renderOutput is not null)
+        {
+            return _renderOutput(context);
+        }
+
+        return null;
+    }
 
     public List<RuleTest> Tests { get; set; } = new();
 
@@ -37,6 +48,11 @@ public class BotRule<T>
     public bool Repeat { get; set; }
 
     public string? Name { get; set; }
+
+    public void SetOutputRenderer(Func<T, string> renderer)
+    {
+        _renderOutput = renderer;
+    }
 
     public bool IsPreConditionTrue(Conversation<T> conversation, BotInput input)
     {
