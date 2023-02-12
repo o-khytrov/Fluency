@@ -6,7 +6,7 @@ namespace Fluency.Engine.PatternSystem.Elements;
 public class WildcardPatternElement : PatternElement
 {
     private readonly Action<IToken>? _action;
-    private int _number;
+    private readonly int _number;
 
     public WildcardPatternElement(int number = 1, Action<IToken>? action = null)
     {

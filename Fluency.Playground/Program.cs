@@ -11,6 +11,7 @@ await new ServiceCollection()
             x.AddBot<Harry>();
         }
     )
+    .AddSingleton<WikipediaClient>()
     .BuildServiceProvider()
     .GetRequiredService<ConsolePlayground>()
     .RunAsync<Harry>();

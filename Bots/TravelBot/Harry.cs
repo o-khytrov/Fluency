@@ -5,6 +5,7 @@ namespace TravelBot;
 
 public class HarryChatContext : ChatContext
 {
+    public string QuestionAbout { get; set; }
 }
 
 public class Harry : Bot<HarryChatContext>
@@ -21,9 +22,11 @@ public class Harry : Bot<HarryChatContext>
 
     public override string Name => "Harry";
 
+    private WikipediaClient _wikipediaClient;
 
-    public Harry()
+    public Harry(WikipediaClient wikipediaClient)
     {
+        _wikipediaClient = wikipediaClient;
         Introductions();
 
         Childhood();
@@ -31,8 +34,12 @@ public class Harry : Bot<HarryChatContext>
         Topic("keywordless", () =>
         {
             R("WHAT_IS", keep: true)
-                .Pattern(x => x.Word("what").Lemma("be").Wildcard(2))
-                .Output("This is something. I need to look at Wikipedia");
+                .Pattern(x => x.Word("what").Lemma("be").Wildcard())
+                .Then((c, m) =>
+                {
+                    c.QuestionAbout = _wikipediaClient.QueryAsync(string.Join(' ', m[0], m[1])).GetAwaiter().GetResult();
+                })
+                .Output(c => $"It is {c.QuestionAbout}");
         });
     }
 
