@@ -122,13 +122,13 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
 
         if (responseCount == conversation.CurrentVolley.ResponseCount)
         {
-            Gambit(scanner, conversation, Topics[conversation.CurrentTopic].BotRules.ToList(), botInput);
+            //Current topic tries to respond to this input
+            Respond(scanner, conversation, Topics[conversation.CurrentTopic], botInput);
         }
 
         if (responseCount == conversation.CurrentVolley.ResponseCount)
         {
-            //Current topic tries to respond to this input
-            Respond(scanner, conversation, Topics[conversation.CurrentTopic], botInput);
+            Gambit(scanner, conversation, Topics[conversation.CurrentTopic].BotRules.ToList(), botInput);
         }
 
         // see if some other topic has keywords matching his input (given we have no response yet)

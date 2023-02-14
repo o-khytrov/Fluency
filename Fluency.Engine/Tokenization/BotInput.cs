@@ -4,19 +4,19 @@ namespace Fluency.Engine.Tokenization;
 
 public class BotInput
 {
-    private int _current;
+    private int _currentToken;
+    private int _currentSentence;
 
     private Dictionary<string, object>? Variables { get; }
 
-    public Document ProcessedInput { get; set; }
-
-    private List<IToken>? TokenizedInput => ProcessedInput.ToTokenList();
+    public Document? ProcessedInput { get; set; }
 
     public string RawInput { get; }
 
     public BotInput(string rawInput, Dictionary<string, object>? variables = null)
     {
-        _current = -1;
+        _currentToken = -1;
+        _currentSentence = 0;
         RawInput = rawInput;
         Variables = variables;
     }
@@ -25,7 +25,7 @@ public class BotInput
     {
         if (CanMoveNext())
         {
-            _current++;
+            _currentToken++;
             return true;
         }
 
@@ -34,15 +34,15 @@ public class BotInput
 
     public bool CanMoveNext()
     {
-        return _current < TokenizedInput.Count - 1;
+        return ProcessedInput is not null && _currentToken < ProcessedInput[_currentSentence].TokensCount - 1;
     }
 
     public void Reset()
     {
-        _current = -1;
+        _currentToken = -1;
     }
 
-    public IToken Current => TokenizedInput[_current];
+    public IToken Current => ProcessedInput[_currentSentence][_currentToken];
 
     public object? TryGetVariable(string key, object? defaultValue = null)
     {
