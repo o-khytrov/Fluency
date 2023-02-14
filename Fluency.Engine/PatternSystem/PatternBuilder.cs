@@ -117,9 +117,10 @@ public class PatternBuilder
         return this;
     }
 
-    public PatternBuilder Phrase(string phrase)
+    public PatternBuilder Phrase(string phrase, bool ignoreOrder = false)
     {
-        _pattern.Elements.Add(new PhrasePatternElement(phrase) { PatternElementType = PatternElementType.Word });
+        _pattern.Elements.Add(new PhrasePatternElement(phrase, arbitraryOrder: ignoreOrder)
+            { PatternElementType = PatternElementType.Word });
         return this;
     }
 

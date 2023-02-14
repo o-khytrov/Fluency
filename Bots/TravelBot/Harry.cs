@@ -6,6 +6,8 @@ namespace TravelBot;
 public class HarryChatContext : ChatContext
 {
     public string Definition { get; set; }
+
+    public string WordToSay { get; set; }
 }
 
 public class Harry : Bot<HarryChatContext>
@@ -33,6 +35,16 @@ public class Harry : Bot<HarryChatContext>
 
         Topic("keywordless", () =>
         {
+            R("SAY", keep: true)
+                .Pattern(x => x.Word("say").Wildcard(2))
+                .Then((c, m) => c.WordToSay = m[0] + " " + m[1])
+                .Output(x => x.WordToSay);
+
+            R("SENSE_OF_LIFE", keep: true)
+                .Pattern(x => x.Phrase("what is sense of life", ignoreOrder: true))
+                .Output("If you believe in reincarnation, then life is currently just a charity shop of used souls.");
+
+
             R("WHAT_IS", keep: true)
                 .Pattern(x => x.Word("who", "what").Lemma("be").Wildcard())
                 .Then((c, m) => { c.Definition = _wikipediaClient.QueryAsync(m[0]).GetAwaiter().GetResult(); })
