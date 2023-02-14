@@ -41,7 +41,7 @@ public class PatternBuilder
     {
         _pattern.Elements.Add(new SingleWordPatternElement
         {
-            PatternElementType = PatternElementType.Word, Value = word.Trim(), Lemma = true
+            Value = word.Trim(), Lemma = true
         });
         return this;
     }
@@ -55,7 +55,7 @@ public class PatternBuilder
     {
         _pattern.Elements.Add(new SingleWordPatternElement
         {
-            PatternElementType = PatternElementType.Word, Value = word.Trim(),
+            Value = word.Trim(),
         });
         return this;
     }
@@ -70,35 +70,26 @@ public class PatternBuilder
     {
         _pattern.Elements.Add(new SingleWordPatternElement(predicate)
         {
-            PatternElementType = PatternElementType.Word, Value = word.Trim(),
+            Value = word.Trim(),
         });
         return this;
     }
 
     public PatternBuilder Pos(PartOfSpeech partOfSpeech)
     {
-        _pattern.Elements.Add(new PartOfSpeechPatternElement(partOfSpeech)
-        {
-            PatternElementType = PatternElementType.Word
-        });
+        _pattern.Elements.Add(new PartOfSpeechPatternElement(partOfSpeech));
         return this;
     }
 
     public PatternBuilder Pronoun()
     {
-        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.PRON)
-        {
-            PatternElementType = PatternElementType.Word
-        });
+        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.PRON));
         return this;
     }
 
     public PatternBuilder Noun()
     {
-        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.NONE)
-        {
-            PatternElementType = PatternElementType.Word
-        });
+        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.NOUN));
         return this;
     }
 
@@ -111,7 +102,6 @@ public class PatternBuilder
     {
         _pattern.Elements.Add(new MultipleWordsPatternElement
         {
-            PatternElementType = PatternElementType.Word,
             Values = words.Select(x => x.Trim()).ToList()
         });
         return this;
@@ -119,26 +109,19 @@ public class PatternBuilder
 
     public PatternBuilder Phrase(string phrase, bool ignoreOrder = false)
     {
-        _pattern.Elements.Add(new PhrasePatternElement(phrase, arbitraryOrder: ignoreOrder)
-            { PatternElementType = PatternElementType.Word });
+        _pattern.Elements.Add(new PhrasePatternElement(phrase, arbitraryOrder: ignoreOrder));
         return this;
     }
 
     public PatternBuilder Wildcard(int number = 1, Action<IToken>? resultAction = null)
     {
-        _pattern.Elements.Add(new WildcardPatternElement(number, resultAction)
-        {
-            PatternElementType = PatternElementType.Wildcard
-        });
+        _pattern.Elements.Add(new WildcardPatternElement(number, resultAction));
         return this;
     }
 
     public PatternBuilder Concept<T>() where T : Concept
     {
-        _pattern.Elements.Add(new ConceptPatternElement
-        {
-            PatternElementType = PatternElementType.Word
-        });
+        _pattern.Elements.Add(new ConceptPatternElement());
         return this;
     }
 
