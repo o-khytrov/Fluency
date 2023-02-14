@@ -67,7 +67,7 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
         return new RuleBuilder<T>(rule, topic);
     }
 
-    protected void Topic(string name, Action action, bool keep = false, bool repeat = false)
+    protected void Topic(string name, Action action, bool keep = true, bool repeat = false)
     {
         if (!Topics.ContainsKey(name))
         {
@@ -138,11 +138,25 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
             foreach (var keywordTopic in keywordsTopics)
             {
                 Respond(scanner, conversation, keywordTopic, botInput);
-            }
 
-            if (responseCount != conversation.CurrentVolley.ResponseCount)
+                if (responseCount != conversation.CurrentVolley.ResponseCount)
+                {
+                    return FinishVolley(conversation);
+                }
+            }
+        }
+
+        if (responseCount == conversation.CurrentVolley.ResponseCount)
+        {
+            var gambitTopics = GambitTopics();
+            foreach (var gambitTopic in gambitTopics)
             {
-                return FinishVolley(conversation);
+                Gambit(scanner, conversation, gambitTopic.BotRules.ToList(), botInput);
+
+                if (responseCount != conversation.CurrentVolley.ResponseCount)
+                {
+                    return FinishVolley(conversation);
+                }
             }
         }
 
@@ -244,5 +258,10 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
             Text = conversation.CurrentVolley.GetResponse()
         };
         return botMessage;
+    }
+
+    private IEnumerable<Topic<T>> GambitTopics()
+    {
+        return Topics.Values.Where(x => x.BotRules.Any(x => x.Type == RuleType.Gambit));
     }
 }

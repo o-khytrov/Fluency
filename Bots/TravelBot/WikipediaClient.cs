@@ -7,7 +7,7 @@ public class WikipediaClient
     private readonly HttpClient _httpClient;
 
     private readonly string _url =
-        "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&titles=";
+        "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext=1&titles=";
 
     public WikipediaClient()
     {
@@ -16,15 +16,26 @@ public class WikipediaClient
 
     public async Task<string> QueryAsync(string query)
     {
-        var response = await _httpClient.GetAsync(_url + query);
-        var content = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<Result>(content);
-        if (result?.query?.pages.Any() ?? false)
+        try
         {
-            return result.query.pages.First().Value.extract;
-        }
+            var response = await _httpClient.GetAsync(_url + query);
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<Result>(content);
+            if (result?.query.pages.Any() ?? false)
+            {
+                var pageText = result.query.pages.First().Value.extract;
+                if (!string.IsNullOrEmpty(pageText))
+                {
+                    return pageText.Substring(0, pageText.IndexOf('.') + 1);
+                }
+            }
 
-        return null;
+            return string.Empty;
+        }
+        catch (Exception)
+        {
+            return string.Empty;
+        }
     }
 
     public class Result

@@ -48,7 +48,7 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public IIntermediateStageBuilder<T> WhenConversation(Func<Conversation<T>, BotInput, bool> condition)
+    public IIntermediateStageBuilder<T> When(Func<Conversation<T>, BotInput, bool> condition)
     {
         _botRule.ConversationConditions.Add(condition);
         return this;
@@ -118,7 +118,7 @@ public interface IConditionBuilder<T>
     /// </summary>
     /// <param name="condition"></param>
     /// <returns></returns>
-    IIntermediateStageBuilder<T> WhenConversation(Func<Conversation<T>, BotInput, bool> condition);
+    IIntermediateStageBuilder<T> When(Func<Conversation<T>, BotInput, bool> condition);
 }
 
 public interface IRuleBuilderInitialStage<T> : IConditionBuilder<T>

@@ -1,4 +1,5 @@
 using Catalyst;
+using Fluency.Engine.Fact;
 using Fluency.Engine.PatternSystem.Elements;
 
 namespace Fluency.Engine.PatternSystem;

@@ -5,7 +5,7 @@ namespace TravelBot;
 
 public class HarryChatContext : ChatContext
 {
-    public string QuestionAbout { get; set; }
+    public string Definition { get; set; }
 }
 
 public class Harry : Bot<HarryChatContext>
@@ -22,7 +22,7 @@ public class Harry : Bot<HarryChatContext>
 
     public override string Name => "Harry";
 
-    private WikipediaClient _wikipediaClient;
+    private readonly WikipediaClient _wikipediaClient;
 
     public Harry(WikipediaClient wikipediaClient)
     {
@@ -35,11 +35,16 @@ public class Harry : Bot<HarryChatContext>
         {
             R("WHAT_IS", keep: true)
                 .Pattern(x => x.Word("what").Lemma("be").Wildcard())
-                .Then((c, m) =>
+                .Then((c, m) => { c.Definition = _wikipediaClient.QueryAsync(m[0]).GetAwaiter().GetResult(); })
+                .Output(c =>
                 {
-                    c.QuestionAbout = _wikipediaClient.QueryAsync(string.Join(' ', m[0], m[1])).GetAwaiter().GetResult();
-                })
-                .Output(c => $"It is {c.QuestionAbout}");
+                    if (string.IsNullOrEmpty(c.Definition))
+                    {
+                        return "I don't know what it is";
+                    }
+
+                    return c.Definition;
+                });
         });
     }
 
@@ -47,12 +52,12 @@ public class Harry : Bot<HarryChatContext>
     {
         // will match on every return start of a conversation 
         G("HELLO", keep: true)
-            .WhenConversation((x, i) => x.Input == 1)
+            .When((x, i) => x.Input == 1)
             .Output(x => $"{OneOf("Welcome back", "Hello again", "Glad you come back", "Hi", "Hi again")}");
 
         // matches every time on startup of a new conversation
         G("WELCOME", keep: true)
-            .WhenConversation((x, i) => x.Input == 0)
+            .When((x, i) => x.Input == 0)
             .Output(x => "Welcome to Fluency");
 
         G("BEEN_HERE")
