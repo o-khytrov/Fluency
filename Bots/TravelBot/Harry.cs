@@ -34,7 +34,7 @@ public class Harry : Bot<HarryChatContext>
         Topic("keywordless", () =>
         {
             R("WHAT_IS", keep: true)
-                .Pattern(x => x.Word("what").Lemma("be").Wildcard())
+                .Pattern(x => x.Word("who", "what").Lemma("be").Wildcard())
                 .Then((c, m) => { c.Definition = _wikipediaClient.QueryAsync(m[0]).GetAwaiter().GetResult(); })
                 .Output(c =>
                 {

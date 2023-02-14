@@ -67,7 +67,7 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
         return new RuleBuilder<T>(rule, topic);
     }
 
-    protected void Topic(string name, Action action, bool keep = true, bool repeat = false)
+    protected void Topic(string name, Action action, bool keep = false, bool repeat = false)
     {
         if (!Topics.ContainsKey(name))
         {
@@ -82,8 +82,8 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
 
         foreach (var rule in tempContainer)
         {
-            rule.Keep = keep;
-            rule.Repeat = repeat;
+            rule.Keep = rule.Keep || keep;
+            rule.Repeat = rule.Repeat || repeat;
         }
 
         Topics[name].BotRules.AddRange(tempContainer);
