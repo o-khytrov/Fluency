@@ -12,9 +12,9 @@ public class Tokenizer
         _nlp = pipeline;
     }
 
-    public Document Tokenize(string text)
+    public Document Tokenize(string text, Language language = Language.English)
     {
-        var doc = new Document(text, Language.English);
+        var doc = new Document(text, language);
         _nlp.ProcessSingle(doc);
         return doc;
     }
