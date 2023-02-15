@@ -28,13 +28,13 @@ public class TravelAgent : Bot<TravelContext>
         R("SOURCE")
             .Pattern(x =>
                 x.Pronoun().Lemma("be").Word("at", "in").Wildcard())
-            .Then((x, m) => x.Source = m[1])
+            .Then((context, match) => context.Source = match[1])
             .Output(c => $"Ok you are in {c.Source}");
 
         R("TARGET")
             .Pattern(x =>
                 x.Word("I", "we").Lemma("want").Phrase("to go to").Wildcard())
-            .Then((x, m) => x.Target = m[0])
+            .Then((context, match) => context.Target = match[0])
             .Output(c => $"Ok you want to go to {c.Target}");
 
         R("COST")

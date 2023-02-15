@@ -12,13 +12,13 @@ public class HarryChatContext : ChatContext
 
 public class Harry : Bot<HarryChatContext>
 {
-    private readonly string[] _mythicalCreatures = new[] { "dragon" };
-    private readonly string[] _insects = new[] { "spider" };
-    private readonly string[] _animals = new[] { "tiger" };
+    private readonly string[] _mythicalCreatures = { "dragon" };
+    private readonly string[] _insects = { "spider" };
+    private readonly string[] _animals = { "tiger" };
 
-    private readonly string _ranAway = "I ran away once, but my parents found me and dragged me back. ";
+    private const string RanAway = "I ran away once, but my parents found me and dragged me back. ";
 
-    private readonly string _scared = "I was  scared of machines. I had vivid dreams of the Terminator robots. ";
+    private const string Scared = "I was  scared of machines. I had vivid dreams of the Terminator robots. ";
 
     public override Language Language => Language.English;
 
@@ -29,10 +29,16 @@ public class Harry : Bot<HarryChatContext>
     public Harry(WikipediaClient wikipediaClient)
     {
         _wikipediaClient = wikipediaClient;
+
         Introductions();
 
         Childhood();
 
+        AddKeywordlessTopic();
+    }
+
+    private void AddKeywordlessTopic()
+    {
         Topic("keywordless", () =>
         {
             R("SAY", keep: true)
@@ -66,10 +72,11 @@ public class Harry : Bot<HarryChatContext>
         G("HELLO", keep: true)
             .When((x, i) => x.Input == 1)
             .Output(x => $"{OneOf("Welcome back", "Hello again", "Glad you come back", "Hi", "Hi again")}");
+            
 
         // matches every time on startup of a new conversation
         G("WELCOME", keep: true)
-            .When((x, i) => x.Input == 0)
+            .When((x, i) => x.Input == 1)
             .Output(x => "Welcome to Fluency");
 
         G("BEEN_HERE")
@@ -107,7 +114,7 @@ public class Harry : Bot<HarryChatContext>
                         .Output("You should try it some time. Travel broadens the mind.");
                 });
             G("RUNAWAY")
-                .Output(_ranAway);
+                .Output(RanAway);
 
             G()
                 .Output("What scared you as a kid? ")
@@ -158,25 +165,25 @@ public class Harry : Bot<HarryChatContext>
                 });
 
             G("SCARE")
-                .Output(_scared);
+                .Output(Scared);
 
             G()
                 .Output("Did you have a happy childhood? ");
         });
         R("HAPPY")
             .Pattern(x => x.Word("how").Wildcard().Word("childhood"))
-            .Output(_ranAway);
+            .Output(RanAway);
 
         R("YOU_AS_A_KID")
             .Pattern(x => x.Word("how").Wildcard().Word("childhood"))
-            .Output(_ranAway);
+            .Output(RanAway);
 
         R()
             .Pattern(x => x.Word("scare", "afraid"))
-            .Output(_scared);
+            .Output(Scared);
 
         R()
             .Pattern(x => x.Word("you").Word("early", "childhood").Word("memory"))
-            .Output(_scared);
+            .Output(Scared);
     }
 }

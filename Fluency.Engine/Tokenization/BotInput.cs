@@ -34,7 +34,8 @@ public class BotInput
 
     public bool CanMoveNext()
     {
-        return ProcessedInput is not null && _currentToken < ProcessedInput[_currentSentence].TokensCount - 1;
+        return ProcessedInput is not null && ProcessedInput.Length > 0
+                                          && _currentToken < ProcessedInput[_currentSentence].TokensCount - 1;
     }
 
     public void Reset()
