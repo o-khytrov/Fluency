@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Api", "Fluency.Api\Fluency.Api.csproj", "{86DB4595-EA04-4CE6-933A-7B0A0AB04B3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D460D9D3-232D-4CCF-BCF1-A3D662615B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86DB4595-EA04-4CE6-933A-7B0A0AB04B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86DB4595-EA04-4CE6-933A-7B0A0AB04B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86DB4595-EA04-4CE6-933A-7B0A0AB04B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86DB4595-EA04-4CE6-933A-7B0A0AB04B3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7276C501-2C2A-4C41-AD2B-DD3601792049} = {77B57DD8-45E5-44B1-A768-56742D29F668}
