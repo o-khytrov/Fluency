@@ -10,6 +10,12 @@ public class InMemoryChatContextStorage : IChatContextStorage
         return Task.FromResult(conversation as Conversation<T>);
     }
 
+    public Task<Conversation?> GetConversation(string userId)
+    {
+        _conversations.TryGetValue(userId, out var conversation);
+        return Task.FromResult(conversation as Conversation);
+    }
+
     public Task DeleteConversation(string userId)
     {
         if (_conversations.ContainsKey(userId))

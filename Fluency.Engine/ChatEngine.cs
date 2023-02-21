@@ -40,7 +40,7 @@ public class ChatEngine
         // Try find the conversation with the user in the storage. 
         // If it is not found create a new one 
         var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>()
-            { UserId = username, CurrentTopic = Constants.DefaultTopic };
+            { UserId = username, CurrentTopic = Constants.DefaultTopic, BotName = bot.GetType().FullName};
 
         conversation.Input++;
         conversation.Messages.Add(userMessage);

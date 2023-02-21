@@ -4,14 +4,9 @@ using Fluency.Engine.Rules;
 
 namespace Fluency.Engine;
 
-public class Conversation<T>
-    where T : ChatContext, new()
+public class Conversation
 {
-    public T Context { get; set; } = new();
-
-    public List<BotRule<T>> RuleShown { get; set; } = new();
-
-    public List<BotRule<T>> PendingRejoinders { get; set; } = new();
+    public string BotName { get; set; } = string.Empty;
 
     public List<Message> Messages { get; set; } = new();
 
@@ -21,9 +16,19 @@ public class Conversation<T>
 
     public int Input { get; set; }
 
-    private List<Volley> Volleys { get; set; } = new();
+    protected List<Volley> Volleys { get; set; } = new();
 
     internal Volley CurrentVolley { get; set; }
+}
+
+public class Conversation<T> : Conversation
+    where T : ChatContext, new()
+{
+    public T Context { get; set; } = new();
+
+    public List<BotRule<T>> RuleShown { get; set; } = new();
+
+    public List<BotRule<T>> PendingRejoinders { get; set; } = new();
 
     public IDisposable BeginVolley()
     {
@@ -40,7 +45,7 @@ public class Conversation<T>
     }
 }
 
-class Volley
+public class Volley
 {
     private readonly StringBuilder _stringBuilder;
 
