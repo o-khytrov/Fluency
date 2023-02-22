@@ -24,7 +24,7 @@ public class BotRule<T>
     public readonly List<Action<T, PatternMatchingResult>> PostActions = new();
     public List<Action<BotInput, T>> PreActions = new();
 
-    public Pattern? Pattern { get; set; }
+    public Pattern<T>? Pattern { get; set; }
 
 
     private Func<T, string>? _renderOutput;

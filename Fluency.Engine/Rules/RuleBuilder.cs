@@ -34,9 +34,9 @@ public class RuleBuilder<T>
         return this;
     }
 
-    public IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction)
+    public IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder<T>> patternBuilderAction)
     {
-        var builder = new PatternBuilder();
+        var builder = new PatternBuilder<T>();
         patternBuilderAction.Invoke(builder);
         _botRule.Pattern = builder.Build();
         return this;
@@ -129,7 +129,7 @@ public interface IRuleBuilderInitialStage<T> : IConditionBuilder<T>
     /// </summary>
     /// <param name="patternBuilderAction"></param>
     /// <returns></returns>
-    IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction);
+    IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder<T>> patternBuilderAction);
 }
 
 public interface IRuleBuilderFinalStage<T>
@@ -176,7 +176,7 @@ public interface IIntermediateStageBuilder<T>
     /// </summary>
     /// <param name="patternBuilderAction"></param>
     /// <returns></returns>
-    IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder> patternBuilderAction);
+    IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder<T>> patternBuilderAction);
 
     /// <summary>
     /// Sets static output

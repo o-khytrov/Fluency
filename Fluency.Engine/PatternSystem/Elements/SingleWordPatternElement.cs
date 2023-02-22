@@ -3,7 +3,7 @@ using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine.PatternSystem.Elements;
 
-public class SingleWordPatternElement : PatternElement
+public class SingleWordPatternElement<T> : PatternElement<T> where T : ChatContext, new()
 {
     public string? Value { get; set; }
 

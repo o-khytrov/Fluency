@@ -11,7 +11,7 @@ public class ConceptParser
         var dictionary = new Dictionary<string, WordEntry>();
         var lines = await File.ReadAllTextAsync(file);
         var conceptLines = lines.Split("concept:")
-            .Select(x => x.Trim().Split(new[] { '(', ' ', ')' }, StringSplitOptions.RemoveEmptyEntries)).ToList();
+            .Select(x => x.Trim().Replace("##<<ENGLISH ","").Replace("##>>","").Split(new[] { '(', ' ', ')' }, StringSplitOptions.RemoveEmptyEntries)).ToList();
         foreach (var conceptLine in conceptLines)
         {
             if (conceptLine.Length == 0)

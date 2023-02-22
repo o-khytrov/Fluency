@@ -3,7 +3,7 @@ using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine.PatternSystem.Elements;
 
-public class WildcardPatternElement : PatternElement
+public class WildcardPatternElement<T> : PatternElement<T> where T : ChatContext, new()
 {
     private readonly Action<IToken>? _action;
     private readonly int _number;

@@ -29,7 +29,7 @@ public class PatternTests
     [InlineData("Today We are in Sumy", "Sumy")]
     public void WordPatternElementTest(string input, string extractedVariable)
     {
-        var pattern = new PatternBuilder()
+        var pattern = new PatternBuilder<ChatContext>()
             .Word("I", "we").Word("am", "are").Word("at", "in").Wildcard()
             .Build();
 
@@ -46,7 +46,7 @@ public class PatternTests
     [InlineData("of life of nature", true, true)]
     public void PhrasePatternElementTest(string input, bool respectOrder, bool match)
     {
-        var pattern = new PatternBuilder()
+        var pattern = new PatternBuilder<ChatContext>()
             .Phrase("what nature of life", ignoreOrder: respectOrder)
             .Build();
 
@@ -61,7 +61,7 @@ public class PatternTests
     [InlineData("We want tea", true)]
     public void PronounPatternElementTest(string input, bool match)
     {
-        var pattern = new PatternBuilder()
+        var pattern = new PatternBuilder<ChatContext>()
             .Pos(PartOfSpeech.PRON).Pos(PartOfSpeech.VERB).Pos(PartOfSpeech.NOUN)
             .Build();
 
@@ -77,7 +77,7 @@ public class PatternTests
     [InlineData("Neighbour's dog ate my cat", false)]
     public void PossessivePronounPatternElementTest(string input, bool match)
     {
-        var pattern = new PatternBuilder()
+        var pattern = new PatternBuilder<ChatContext>()
             .Pos(PartOfSpeech.NOUN).Noun().Pos(PartOfSpeech.VERB).Pos(PartOfSpeech.NOUN)
             .Build();
 
@@ -93,7 +93,7 @@ public class PatternTests
     [InlineData("Ich habe Kopfschmerzen", true)]
     public void GermanTokenizationTests(string input, bool match)
     {
-        var pattern = new PatternBuilder()
+        var pattern = new PatternBuilder<ChatContext>()
             .Pos(PartOfSpeech.PRON).Pos(PartOfSpeech.VERB).Pos(PartOfSpeech.VERB)
             .Build();
 

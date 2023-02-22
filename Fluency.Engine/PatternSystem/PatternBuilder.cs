@@ -1,16 +1,16 @@
 using Catalyst;
-using Fluency.Engine.Fact;
 using Fluency.Engine.PatternSystem.Elements;
 
 namespace Fluency.Engine.PatternSystem;
 
-public class PatternBuilder
+public class PatternBuilder<T>
+    where T : ChatContext, new()
 {
-    private readonly Pattern _pattern;
+    private readonly Pattern<T> _pattern;
 
     public PatternBuilder()
     {
-        _pattern = new Pattern();
+        _pattern = new Pattern<T>();
     }
 
     /// <summary>
@@ -18,17 +18,17 @@ public class PatternBuilder
     /// </summary>
     /// <param name="patternBuilderAction"></param>
     /// <returns></returns>
-    public PatternBuilder Or(params Action<PatternBuilder>[] patternBuilderAction)
+    public PatternBuilder<T> Or(params Action<PatternBuilder<T>>[] patternBuilderAction)
     {
-        var patterns = new List<Pattern>();
+        var patterns = new List<Pattern<T>>();
         foreach (var builderAction in patternBuilderAction)
         {
-            var builder = new PatternBuilder();
+            var builder = new PatternBuilder<T>();
             builderAction.Invoke(builder);
             patterns.Add(builder.Build());
         }
 
-        _pattern.Elements.Add(new Disjunction(patterns));
+        _pattern.Elements.Add(new Disjunction<T>(patterns));
         return this;
     }
 
@@ -37,9 +37,9 @@ public class PatternBuilder
     /// </summary>
     /// <param name="word"></param>
     /// <returns></returns>
-    public PatternBuilder Lemma(string word)
+    public PatternBuilder<T> Lemma(string word)
     {
-        _pattern.Elements.Add(new SingleWordPatternElement
+        _pattern.Elements.Add(new SingleWordPatternElement<T>
         {
             Value = word.Trim(), Lemma = true
         });
@@ -51,14 +51,15 @@ public class PatternBuilder
     /// </summary>
     /// <param name="word"></param>
     /// <returns></returns>
-    public PatternBuilder Word(string word)
+    public PatternBuilder<T> Word(string word)
     {
-        _pattern.Elements.Add(new SingleWordPatternElement
+        _pattern.Elements.Add(new SingleWordPatternElement<T>
         {
             Value = word.Trim(),
         });
         return this;
     }
+
 
     /// <summary>
     /// Match single word
@@ -66,30 +67,30 @@ public class PatternBuilder
     /// <param name="word"></param>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public PatternBuilder Word(string word, Func<IToken, bool> predicate)
+    public PatternBuilder<T> Word(string word, Func<IToken, bool> predicate)
     {
-        _pattern.Elements.Add(new SingleWordPatternElement(predicate)
+        _pattern.Elements.Add(new SingleWordPatternElement<T>(predicate)
         {
             Value = word.Trim(),
         });
         return this;
     }
 
-    public PatternBuilder Pos(PartOfSpeech partOfSpeech)
+    public PatternBuilder<T> Pos(PartOfSpeech partOfSpeech)
     {
-        _pattern.Elements.Add(new PartOfSpeechPatternElement(partOfSpeech));
+        _pattern.Elements.Add(new PartOfSpeechPatternElement<T>(partOfSpeech));
         return this;
     }
 
-    public PatternBuilder Pronoun()
+    public PatternBuilder<T> Pronoun()
     {
-        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.PRON));
+        _pattern.Elements.Add(new PartOfSpeechPatternElement<T>(PartOfSpeech.PRON));
         return this;
     }
 
-    public PatternBuilder Noun()
+    public PatternBuilder<T> Noun()
     {
-        _pattern.Elements.Add(new PartOfSpeechPatternElement(PartOfSpeech.NOUN));
+        _pattern.Elements.Add(new PartOfSpeechPatternElement<T>(PartOfSpeech.NOUN));
         return this;
     }
 
@@ -98,34 +99,34 @@ public class PatternBuilder
     /// </summary>
     /// <param name="words"></param>
     /// <returns></returns>
-    public PatternBuilder Word(params string[] words)
+    public PatternBuilder<T> Word(params string[] words)
     {
-        _pattern.Elements.Add(new MultipleWordsPatternElement
+        _pattern.Elements.Add(new MultipleWordsPatternElement<T>
         {
             Values = words.Select(x => x.Trim()).ToList()
         });
         return this;
     }
 
-    public PatternBuilder Phrase(string phrase, bool ignoreOrder = false)
+    public PatternBuilder<T> Phrase(string phrase, bool ignoreOrder = false)
     {
-        _pattern.Elements.Add(new PhrasePatternElement(phrase, arbitraryOrder: ignoreOrder));
+        _pattern.Elements.Add(new PhrasePatternElement<T>(phrase, arbitraryOrder: ignoreOrder));
         return this;
     }
 
-    public PatternBuilder Wildcard(int number = 1, Action<IToken>? resultAction = null)
+    public PatternBuilder<T> Wildcard(int number = 1, Action<IToken>? resultAction = null)
     {
-        _pattern.Elements.Add(new WildcardPatternElement(number, resultAction));
+        _pattern.Elements.Add(new WildcardPatternElement<T>(number, resultAction));
         return this;
     }
 
-    public PatternBuilder Concept<T>() where T : Concept
+    public PatternBuilder<T> Concept()
     {
-        _pattern.Elements.Add(new ConceptPatternElement());
+        _pattern.Elements.Add(new ConceptPatternElement<T>());
         return this;
     }
 
-    public Pattern Build()
+    public Pattern<T> Build()
     {
         return _pattern;
     }

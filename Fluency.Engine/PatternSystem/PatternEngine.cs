@@ -12,7 +12,7 @@ public class PatternEngine
         _tokenizer = tokenizer;
     }
 
-    public PatternMatchingResult Match(Pattern pattern, BotInput input)
+    public PatternMatchingResult Match<T>(Pattern<T> pattern, BotInput input) where T : ChatContext, new()
     {
         var extracted = new List<string>();
         var isMatch = true;

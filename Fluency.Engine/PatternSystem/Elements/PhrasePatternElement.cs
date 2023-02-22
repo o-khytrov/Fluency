@@ -3,7 +3,7 @@ using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine.PatternSystem.Elements;
 
-public class PhrasePatternElement : PatternElement
+public class PhrasePatternElement<T> : PatternElement<T> where T : ChatContext, new()
 {
     private List<IToken>? _phraseTokens;
 

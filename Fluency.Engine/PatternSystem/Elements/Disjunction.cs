@@ -2,11 +2,11 @@ using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine.PatternSystem.Elements;
 
-public class Disjunction : PatternElement
+public class Disjunction<T> : PatternElement<T> where T : ChatContext, new()
 {
-    private readonly List<Pattern> _patterns;
+    private readonly List<Pattern<T>> _patterns;
 
-    public Disjunction(List<Pattern> patterns)
+    public Disjunction(List<Pattern<T>> patterns)
     {
         _patterns = patterns;
     }
@@ -26,7 +26,7 @@ public class Disjunction : PatternElement
         return false;
     }
 
-    private bool MatchChildPattern(BotInput input, Pattern childPattern, List<string> extracted, Tokenizer tokenizer)
+    private bool MatchChildPattern(BotInput input, Pattern<T> childPattern, List<string> extracted, Tokenizer tokenizer)
     {
         var matched = true;
         foreach (var element in childPattern.Elements)

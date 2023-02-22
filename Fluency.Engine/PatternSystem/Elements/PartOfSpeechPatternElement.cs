@@ -3,7 +3,7 @@ using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine.PatternSystem.Elements;
 
-public class PartOfSpeechPatternElement : PatternElement
+public class PartOfSpeechPatternElement<T> : PatternElement<T> where T : ChatContext, new()
 {
     private readonly PartOfSpeech _partOfSpeech;
 
