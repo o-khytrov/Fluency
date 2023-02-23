@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Bots\TravelBot\TravelBot.csproj" />
+      <ProjectReference Include="..\Bots\SampleBots\SampleBots.csproj" />
       <ProjectReference Include="..\Fluency.Engine\Fluency.Engine.csproj" />
     </ItemGroup>
 

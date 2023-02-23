@@ -1,7 +1,7 @@
 using Fluency.Engine;
 using Mosaik.Core;
 
-namespace TravelBot;
+namespace SampleBots.Travelling;
 
 public class TravelAgent : Bot<TravelContext>
 {

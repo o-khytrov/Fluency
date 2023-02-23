@@ -1,6 +1,6 @@
 using Fluency.Engine;
 
-namespace TravelBot;
+namespace SampleBots.Travelling;
 
 public class TravelContext : ChatContext
 {

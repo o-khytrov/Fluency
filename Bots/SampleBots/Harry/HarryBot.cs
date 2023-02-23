@@ -1,7 +1,7 @@
 using Fluency.Engine;
 using Mosaik.Core;
 
-namespace TravelBot;
+namespace SampleBots.Harry;
 
 public class HarryChatContext : ChatContext
 {
@@ -17,7 +17,7 @@ public class HarryChatContext : ChatContext
     }
 }
 
-public class Harry : Bot<HarryChatContext>
+public class HarryBot : Bot<HarryChatContext>
 {
     private readonly string[] _mythicalCreatures = { "dragon" };
     private readonly string[] _insects = { "spider" };
@@ -33,7 +33,7 @@ public class Harry : Bot<HarryChatContext>
 
     private readonly WikipediaClient _wikipediaClient;
 
-    public Harry(WikipediaClient wikipediaClient)
+    public HarryBot(WikipediaClient wikipediaClient)
     {
         _wikipediaClient = wikipediaClient;
 

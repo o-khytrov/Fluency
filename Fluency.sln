@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Playground", "Fluen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Engine", "Fluency.Engine\Fluency.Engine.csproj", "{D41C3600-95B5-4A6D-A2EA-C07526E790B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelBot", "Bots\TravelBot\TravelBot.csproj", "{7276C501-2C2A-4C41-AD2B-DD3601792049}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBots", "Bots\SampleBots\SampleBots.csproj", "{7276C501-2C2A-4C41-AD2B-DD3601792049}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluency.Tests", "Fluency.Tests\Fluency.Tests.csproj", "{416E3071-55FA-4182-982C-AD9ADB58471F}"
 EndProject
