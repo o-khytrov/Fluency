@@ -12,17 +12,17 @@ public class PatternEngine
         _tokenizer = tokenizer;
     }
 
-    public PatternMatchingResult Match<T>(Pattern<T> pattern, BotInput input) where T : ChatContext, new()
+    public PatternMatchingResult Match<T>(Pattern<T> pattern, Conversation<T> conversation) where T : ChatContext, new()
     {
         var extracted = new List<string>();
         var isMatch = true;
-        input.Reset();
+        conversation.CurrentInput.Reset();
         foreach (var element in pattern.Elements)
         {
             var currentRuleMatch = false;
-            while (!currentRuleMatch && input.CanMoveNext())
+            while (!currentRuleMatch && conversation.CurrentInput.CanMoveNext())
             {
-                currentRuleMatch = element.Match(input, extracted, _tokenizer);
+                currentRuleMatch = element.Match(conversation, extracted, _tokenizer);
             }
 
             if (!currentRuleMatch)

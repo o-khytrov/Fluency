@@ -12,8 +12,9 @@ public class PartOfSpeechPatternElement<T> : PatternElement<T> where T : ChatCon
         _partOfSpeech = partOfSpeech;
     }
 
-    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
+    public override bool Match(Conversation<T> conversation, List<string> extracted, Tokenizer tokenizer)
     {
+        var input = conversation.CurrentInput;
         if (!input.MoveNext())
         {
             return false;

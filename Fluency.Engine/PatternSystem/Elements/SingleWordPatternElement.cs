@@ -18,8 +18,9 @@ public class SingleWordPatternElement<T> : PatternElement<T> where T : ChatConte
 
     public StringComparison StringComparison { get; set; } = StringComparison.OrdinalIgnoreCase;
 
-    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
+    public override bool Match(Conversation<T> conversation, List<string> extracted, Tokenizer tokenizer)
     {
+        var input = conversation.CurrentInput;
         if (!input.MoveNext())
         {
             return false;

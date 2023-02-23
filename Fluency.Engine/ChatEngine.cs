@@ -40,19 +40,19 @@ public class ChatEngine
         // Try find the conversation with the user in the storage. 
         // If it is not found create a new one 
         var conversation = await _chatContextStorage.GetConversation<T>(username) ?? new Conversation<T>()
-            { UserId = username, CurrentTopic = Constants.DefaultTopic, BotName = bot.GetType().FullName};
+            { UserId = username, CurrentTopic = Constants.DefaultTopic, BotName = bot.GetType().FullName };
 
         conversation.Input++;
         conversation.Messages.Add(userMessage);
 
         // Prepare input for bot, tokenization and POS tagging  
-        var botInput = PrepareBotInput(userMessage);
+        conversation.CurrentInput = PrepareBotInput(userMessage);
 
         conversation.BeginVolley();
 
         //Run Control method of the bot and try get response
         //If the bot is not responding return chat complete message
-        var botMessage = bot.Control(_patternEngine, conversation, botInput) ?? new BotMessage
+        var botMessage = bot.Control(_patternEngine, conversation) ?? new BotMessage
         {
             Text = bot.ChatCompleteMessage
         };

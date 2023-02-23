@@ -8,6 +8,13 @@ public class HarryChatContext : ChatContext
     public string Definition { get; set; }
 
     public string WordToSay { get; set; }
+
+    public NestedClass ComplexProperty { get; set; }
+
+    public class NestedClass
+    {
+        public string PropOne { get; set; }
+    }
 }
 
 public class Harry : Bot<HarryChatContext>
@@ -42,8 +49,8 @@ public class Harry : Bot<HarryChatContext>
         Topic("keywordless", () =>
         {
             R("SAY", keep: true)
-                .Pattern(x => x.Word("say").Wildcard(2))
-                .Then((c, m) => c.WordToSay = m[0] + " " + m[1])
+                .Pattern(x => x.Word("say").Wildcard(1, (c, s) => c.WordToSay = s))
+                //.Then((c, m) => c.WordToSay = m[0] + " " + m[1])
                 .Output(x => x.WordToSay);
 
             R("SENSE_OF_LIFE", keep: true)
@@ -72,7 +79,7 @@ public class Harry : Bot<HarryChatContext>
         G("HELLO", keep: true)
             .When((x, i) => x.Input == 1)
             .Output(x => $"{OneOf("Welcome back", "Hello again", "Glad you come back", "Hi", "Hi again")}");
-            
+
 
         // matches every time on startup of a new conversation
         G("WELCOME", keep: true)

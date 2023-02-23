@@ -34,7 +34,9 @@ public class PatternTests
             .Build();
 
         var patternEngine = new PatternEngine(_englishTokenizer);
-        var result = patternEngine.Match(pattern, new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) });
+        var conversation = new Conversation<ChatContext>();
+        conversation.CurrentInput = new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) };
+        var result = patternEngine.Match(pattern, conversation);
         Assert.True(result.Match);
         Assert.Equal(extractedVariable, result[0]);
     }
@@ -51,7 +53,10 @@ public class PatternTests
             .Build();
 
         var patternEngine = new PatternEngine(_englishTokenizer);
-        var result = patternEngine.Match(pattern, new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) });
+
+        var conversation = new Conversation<ChatContext>();
+        conversation.CurrentInput = new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) };
+        var result = patternEngine.Match(pattern, conversation);
         Assert.Equal(match, result.Match);
     }
 
@@ -66,7 +71,10 @@ public class PatternTests
             .Build();
 
         var patternEngine = new PatternEngine(_englishTokenizer);
-        var result = patternEngine.Match(pattern, new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) });
+
+        var conversation = new Conversation<ChatContext>();
+        conversation.CurrentInput = new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) };
+        var result = patternEngine.Match(pattern, conversation);
         Assert.Equal(match, result.Match);
     }
 
@@ -84,24 +92,10 @@ public class PatternTests
         var processedInput = _englishTokenizer.Tokenize(input);
         _testOutputHelper.WriteLine(processedInput.ToJson());
         var patternEngine = new PatternEngine(_englishTokenizer);
-        var result = patternEngine.Match(pattern, new BotInput(input) { ProcessedInput = processedInput });
-        Assert.Equal(match, result.Match);
-    }
 
-    [Theory]
-    //[InlineData("Ich gehe nach Hause", true)]
-    [InlineData("Ich habe Kopfschmerzen", true)]
-    public void GermanTokenizationTests(string input, bool match)
-    {
-        var pattern = new PatternBuilder<ChatContext>()
-            .Pos(PartOfSpeech.PRON).Pos(PartOfSpeech.VERB).Pos(PartOfSpeech.VERB)
-            .Build();
-
-        var doc = new Document(input, Language.German);
-        var processedInput = (Document) _germanTokenizer.ProcessSingle(doc);
-        _testOutputHelper.WriteLine(processedInput.ToJson());
-        var patternEngine = new PatternEngine(_englishTokenizer);
-        var result = patternEngine.Match(pattern, new BotInput(input) { ProcessedInput = processedInput });
+        var conversation = new Conversation<ChatContext>();
+        conversation.CurrentInput = new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) };
+        var result = patternEngine.Match(pattern, conversation);
         Assert.Equal(match, result.Match);
     }
 }

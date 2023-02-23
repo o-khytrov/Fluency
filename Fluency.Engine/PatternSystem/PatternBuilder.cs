@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Catalyst;
 using Fluency.Engine.PatternSystem.Elements;
 
@@ -114,12 +115,38 @@ public class PatternBuilder<T>
         return this;
     }
 
+    public PatternBuilder<T> Wildcard()
+    {
+        _pattern.Elements.Add(new WildcardPatternElement<T>(1, null));
+        return this;
+    }
+
+    public PatternBuilder<T> Wildcard(int number = 1, Action<T, string> action = null)
+    {
+        _pattern.Elements.Add(new WildcardPatternElement<T>(number, assign: action));
+        return this;
+    }
+
+    /*
+    public PatternBuilder<T> Wildcard<TProperty>(int number = 1,
+        Expression<Func<T, TProperty>>? expression = null)
+    {
+        if (expression is not null)
+        {
+            var propertyInfo = expression.GetMember();
+        }
+
+        _pattern.Elements.Add(new WildcardPatternElement<T>(number, null));
+        return this;
+    }
+    */
+    /*
     public PatternBuilder<T> Wildcard(int number = 1, Action<IToken>? resultAction = null)
     {
         _pattern.Elements.Add(new WildcardPatternElement<T>(number, resultAction));
         return this;
     }
-
+*/
     public PatternBuilder<T> Concept()
     {
         _pattern.Elements.Add(new ConceptPatternElement<T>());

@@ -1,5 +1,3 @@
-using Fluency.Engine.Tokenization;
-
 namespace Fluency.Engine.PatternSystem.Elements;
 
 public class MultipleWordsPatternElement<T> : PatternElement<T> where T : ChatContext, new()
@@ -8,8 +6,9 @@ public class MultipleWordsPatternElement<T> : PatternElement<T> where T : ChatCo
 
     public StringComparison StringComparison { get; set; } = StringComparison.OrdinalIgnoreCase;
 
-    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
+    public override bool Match(Conversation<T> conversation, List<string> extracted, Tokenizer tokenizer)
     {
+        var input = conversation.CurrentInput;
         if (!input.MoveNext())
         {
             return false;

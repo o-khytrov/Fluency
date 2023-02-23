@@ -20,9 +20,10 @@ public class PhrasePatternElement<T> : PatternElement<T> where T : ChatContext, 
         _arbitraryOrder = arbitraryOrder;
     }
 
-    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
+    public override bool Match(Conversation<T> conversation, List<string> extracted, Tokenizer tokenizer)
     {
         _phraseTokens ??= tokenizer.Tokenize(_phrase).ToTokenList();
+        var input = conversation.CurrentInput;
         var isMatch = true;
         if (_arbitraryOrder)
         {

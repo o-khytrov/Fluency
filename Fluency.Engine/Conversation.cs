@@ -1,6 +1,7 @@
 using System.Text;
 using Fluency.Engine.Models;
 using Fluency.Engine.Rules;
+using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine;
 
@@ -25,6 +26,8 @@ public class Conversation<T> : Conversation
     where T : ChatContext, new()
 {
     public T Context { get; set; } = new();
+
+    public BotInput CurrentInput { get; set; }
 
     public List<BotRule<T>> RuleShown { get; set; } = new();
 

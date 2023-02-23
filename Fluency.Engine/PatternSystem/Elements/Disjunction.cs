@@ -11,12 +11,12 @@ public class Disjunction<T> : PatternElement<T> where T : ChatContext, new()
         _patterns = patterns;
     }
 
-    public override bool Match(BotInput input, List<string> extracted, Tokenizer tokenizer)
+    public override bool Match(Conversation<T> conversation, List<string> extracted, Tokenizer tokenizer)
     {
         foreach (var childPattern in _patterns)
         {
-            input.Reset();
-            var match = MatchChildPattern(input, childPattern, extracted, tokenizer);
+            conversation.CurrentInput.Reset();
+            var match = MatchChildPattern(conversation, childPattern, extracted, tokenizer);
             if (match)
             {
                 return true;
@@ -26,8 +26,10 @@ public class Disjunction<T> : PatternElement<T> where T : ChatContext, new()
         return false;
     }
 
-    private bool MatchChildPattern(BotInput input, Pattern<T> childPattern, List<string> extracted, Tokenizer tokenizer)
+    private bool MatchChildPattern(Conversation<T> conversation, Pattern<T> childPattern, List<string> extracted,
+        Tokenizer tokenizer)
     {
+        var input = conversation.CurrentInput;
         var matched = true;
         foreach (var element in childPattern.Elements)
         {
@@ -35,7 +37,7 @@ public class Disjunction<T> : PatternElement<T> where T : ChatContext, new()
             input.Reset();
             while (!currentRuleMatch && input.CanMoveNext())
             {
-                currentRuleMatch = element.Match(input, extracted, tokenizer);
+                currentRuleMatch = element.Match(conversation, extracted, tokenizer);
             }
 
             if (!currentRuleMatch)

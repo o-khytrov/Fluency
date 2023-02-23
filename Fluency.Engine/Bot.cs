@@ -112,32 +112,32 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
         return Topics[topicName];
     }
 
-    public virtual BotMessage? Control(PatternEngine scanner, Conversation<T> conversation, BotInput botInput)
+    public virtual BotMessage? Control(PatternEngine scanner, Conversation<T> conversation)
     {
         var responseCount = conversation.CurrentVolley.ResponseCount;
         if (conversation.PendingRejoinders.Any())
         {
-            Respond(scanner, conversation, conversation.PendingRejoinders, botInput);
+            Respond(scanner, conversation, conversation.PendingRejoinders);
         }
 
         if (responseCount == conversation.CurrentVolley.ResponseCount)
         {
             //Current topic tries to respond to this input
-            Respond(scanner, conversation, Topics[conversation.CurrentTopic], botInput);
+            Respond(scanner, conversation, Topics[conversation.CurrentTopic]);
         }
 
         if (responseCount == conversation.CurrentVolley.ResponseCount)
         {
-            Gambit(scanner, conversation, Topics[conversation.CurrentTopic].BotRules.ToList(), botInput);
+            Gambit(scanner, conversation, Topics[conversation.CurrentTopic].BotRules.ToList());
         }
 
         // see if some other topic has keywords matching his input (given we have no response yet)
         if (responseCount == conversation.CurrentVolley.ResponseCount)
         {
-            var keywordsTopics = GetKeywordTopics(botInput);
+            var keywordsTopics = GetKeywordTopics(conversation.CurrentInput);
             foreach (var keywordTopic in keywordsTopics)
             {
-                Respond(scanner, conversation, keywordTopic, botInput);
+                Respond(scanner, conversation, keywordTopic);
 
                 if (responseCount != conversation.CurrentVolley.ResponseCount)
                 {
@@ -151,7 +151,7 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
             var gambitTopics = GambitTopics();
             foreach (var gambitTopic in gambitTopics)
             {
-                Gambit(scanner, conversation, gambitTopic.BotRules.ToList(), botInput);
+                Gambit(scanner, conversation, gambitTopic.BotRules.ToList());
 
                 if (responseCount != conversation.CurrentVolley.ResponseCount)
                 {
@@ -169,11 +169,11 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
         return FinishVolley(conversation);
     }
 
-    private void Gambit(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules, BotInput botInput)
+    private void Gambit(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules)
     {
         var gambit = rules.FirstOrDefault(x => x.Type == RuleType.Gambit
                                                && (!conversation.RuleShown.Contains(x) || x.Keep)
-                                               && x.IsPreConditionTrue(conversation, botInput));
+                                               && x.IsPreConditionTrue(conversation));
         if (gambit is not null)
         {
             PushRejoinders(conversation, gambit);
@@ -183,12 +183,12 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
         }
     }
 
-    private void Respond(PatternEngine scanner, Conversation<T> conversation, Topic<T> topic, BotInput botInput)
+    private void Respond(PatternEngine scanner, Conversation<T> conversation, Topic<T> topic)
     {
-        Respond(scanner, conversation, topic.BotRules.ToList(), botInput);
+        Respond(scanner, conversation, topic.BotRules.ToList());
     }
 
-    private void Respond(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules, BotInput botInput)
+    private void Respond(PatternEngine scanner, Conversation<T> conversation, List<BotRule<T>> rules)
     {
         foreach (var rule in rules.Where(x => x.Type == RuleType.Responder))
         {
@@ -199,15 +199,15 @@ public abstract class Bot<T> : Bot where T : ChatContext, new()
 
             foreach (var preAction in rule.PreActions)
             {
-                preAction.Invoke(botInput, conversation.Context);
+                preAction.Invoke(conversation.CurrentInput, conversation.Context);
             }
 
-            if (rule.IsPreConditionTrue(conversation, botInput))
+            if (rule.IsPreConditionTrue(conversation))
             {
                 var isMatch = true;
                 if (rule.Pattern is not null)
                 {
-                    var matchingResult = scanner.Match(rule.Pattern, botInput);
+                    var matchingResult = scanner.Match(rule.Pattern, conversation);
                     isMatch = matchingResult.Match;
                     if (matchingResult.Match)
                     {

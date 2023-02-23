@@ -54,8 +54,9 @@ public class BotRule<T>
         _renderOutput = renderer;
     }
 
-    public bool IsPreConditionTrue(Conversation<T> conversation, BotInput input)
+    public bool IsPreConditionTrue(Conversation<T> conversation)
     {
+        var input = conversation.CurrentInput;
         var isMatch = true;
         foreach (var condition in Conditions)
         {
