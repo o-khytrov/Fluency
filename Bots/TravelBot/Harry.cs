@@ -49,8 +49,7 @@ public class Harry : Bot<HarryChatContext>
         Topic("keywordless", () =>
         {
             R("SAY", keep: true)
-                .Pattern(x => x.Word("say").Wildcard(1, (c, s) => c.WordToSay = s))
-                //.Then((c, m) => c.WordToSay = m[0] + " " + m[1])
+                .Pattern(x => x.Word("say").Wildcard((c, m) => c.WordToSay = m))
                 .Output(x => x.WordToSay);
 
             R("SENSE_OF_LIFE", keep: true)

@@ -121,6 +121,12 @@ public class PatternBuilder<T>
         return this;
     }
 
+    public PatternBuilder<T> Wildcard(Action<T, string> action = null)
+    {
+        _pattern.Elements.Add(new WildcardPatternElement<T>(1, assign: action));
+        return this;
+    }
+
     public PatternBuilder<T> Wildcard(int number = 1, Action<T, string> action = null)
     {
         _pattern.Elements.Add(new WildcardPatternElement<T>(number, assign: action));
