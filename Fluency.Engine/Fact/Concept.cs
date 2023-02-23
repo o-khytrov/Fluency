@@ -6,44 +6,81 @@ public class Concept : List<string>
 
 public class ConceptParser
 {
-    public async Task<Dictionary<string, WordEntry>> Parse(string file)
+    public async Task ParseSubstitutions(string file, Dictionary<string, HashSet<string>> dictionary)
     {
-        var dictionary = new Dictionary<string, WordEntry>();
-        var lines = await File.ReadAllTextAsync(file);
-        var conceptLines = lines.Split("concept:")
-            .Select(x => x.Trim().Replace("##<<ENGLISH ","").Replace("##>>","").Split(new[] { '(', ' ', ')' }, StringSplitOptions.RemoveEmptyEntries)).ToList();
-        foreach (var conceptLine in conceptLines)
+        var lines = await File.ReadAllLinesAsync(file);
+        foreach (var line in lines)
         {
-            if (conceptLine.Length == 0)
+            var trimmedLine= line.Trim();
+            if (trimmedLine.StartsWith("#"))
             {
                 continue;
-            }
+            } 
+            var parts = trimmedLine.Split(' ');
+            var conceptName = parts[1].ToLower();
+            var member = parts[0];
 
-            var conceptName = conceptLine[0].Replace("~", "");
-            for (int i = 1; i < conceptLine.Length; i++)
+            if (dictionary.ContainsKey(conceptName))
             {
-                var anotherConcept = false;
-                var member = conceptLine[1];
-                if (member.StartsWith("~"))
-                {
-                    AddChildConcepts(conceptName, member);
-                    continue;
-                }
-
-                if (!dictionary.ContainsKey(member))
-                {
-                    dictionary.Add(member, new WordEntry(member));
-                }
-
-                dictionary[member].AddConcept(conceptName);
+                dictionary[conceptName].Add(member.Trim());
+            }
+            else
+            {
+                dictionary.Add(conceptName, new HashSet<string>() { member });
             }
         }
+    }
 
-        return dictionary;
+    public async Task Parse(string file, Dictionary<string, HashSet<string>> dictionary)
+    {
+        var lines = await File.ReadAllLinesAsync(file);
+        var currentConcept = string.Empty;
+        foreach (var part in lines)
+        {
+            var isFirstLine = false;
+            var line = part.Replace("##<<ENGLISH ", "").Replace("##>>", "").Trim();
+            if (line.StartsWith("concept: "))
+            {
+                line = line.Replace("concept: ", string.Empty);
+                isFirstLine = true;
+            }
+
+            line = line.Replace("(", string.Empty).Replace(")", string.Empty);
+
+            var result = line.Split('"')
+                .Select((element, index) => index % 2 == 0 // If even index
+                    ? element.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) // Split the item
+                    : new string[] { element }) // Keep the entire item
+                .SelectMany(element => element).ToList();
+            if (isFirstLine)
+            {
+                currentConcept = result.First().ToLower();
+                dictionary.Add(currentConcept, result.Skip(1).Select(PrepareMember).ToHashSet());
+            }
+            else
+            {
+                foreach (var member in result)
+                {
+                    var conceptMember = PrepareMember(member);
+
+                    dictionary[currentConcept].Add(conceptMember);
+                }
+            }
+        }
+    }
+
+    private static string PrepareMember(string member)
+    {
+        var conceptMember = member;
+        if (conceptMember.StartsWith("~"))
+        {
+            conceptMember = conceptMember.ToLower();
+        }
+
+        return conceptMember;
     }
 
     public void AddChildConcepts(string parentConceptName, string childConcept)
     {
-        
     }
 }
