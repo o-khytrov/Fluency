@@ -2,6 +2,7 @@ using System;
 using Catalyst;
 using Fluency.Engine;
 using Fluency.Engine.PatternSystem;
+using Fluency.Engine.PatternSystem.Elements;
 using Fluency.Engine.Tokenization;
 using Mosaik.Core;
 using Xunit;
@@ -86,16 +87,22 @@ public class PatternTests
     public void PossessivePronounPatternElementTest(string input, bool match)
     {
         var pattern = new PatternBuilder<ChatContext>()
-            .Pos(PartOfSpeech.NOUN).Noun().Pos(PartOfSpeech.VERB).Pos(PartOfSpeech.NOUN)
+            .Pos(PartOfSpeech.PRON).Noun().Pos(PartOfSpeech.VERB).Pos(PartOfSpeech.NOUN)
             .Build();
 
-        var processedInput = _englishTokenizer.Tokenize(input);
-        _testOutputHelper.WriteLine(processedInput.ToJson());
-        var patternEngine = new PatternEngine(_englishTokenizer);
+        var result = Match(pattern, input);
 
-        var conversation = new Conversation<ChatContext>();
-        conversation.CurrentInput = new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) };
-        var result = patternEngine.Match(pattern, conversation);
         Assert.Equal(match, result.Match);
+    }
+
+    private PatternMatchingResult Match(Pattern<ChatContext> pattern, string input)
+    {
+        var patternEngine = new PatternEngine(_englishTokenizer);
+        var conversation = new Conversation<ChatContext>
+        {
+            CurrentInput = new BotInput(input) { ProcessedInput = _englishTokenizer.Tokenize(input) }
+        };
+        var result = patternEngine.Match(pattern, conversation);
+        return result;
     }
 }
