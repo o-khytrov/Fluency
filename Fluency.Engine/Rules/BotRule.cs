@@ -26,6 +26,7 @@ public class BotRule<T>
 
     public Pattern<T>? Pattern { get; set; }
 
+    public Func<Conversation<T>, PatternEngine, bool> Condition { get; set; }
 
     private Func<T, string>? _renderOutput;
 

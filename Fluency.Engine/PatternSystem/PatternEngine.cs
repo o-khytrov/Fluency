@@ -1,5 +1,4 @@
 using Fluency.Engine.PatternSystem.Elements;
-using Fluency.Engine.Tokenization;
 
 namespace Fluency.Engine.PatternSystem;
 
@@ -10,6 +9,15 @@ public class PatternEngine
     public PatternEngine(Tokenizer tokenizer)
     {
         _tokenizer = tokenizer;
+    }
+
+    public bool Match<T>(Action<PatternBuilder<T>> patternBuilder, Conversation<T> conversationContext)
+        where T : ChatContext, new()
+    {
+        //TODO cache patterns 
+        var pattern = new PatternBuilder<T>();
+        patternBuilder.Invoke(pattern);
+        return Match(pattern.Build(), conversationContext).Match;
     }
 
     public PatternMatchingResult Match<T>(Pattern<T> pattern, Conversation<T> conversation) where T : ChatContext, new()

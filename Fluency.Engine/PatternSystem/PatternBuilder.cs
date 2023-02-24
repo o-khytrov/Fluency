@@ -88,6 +88,12 @@ public class PatternBuilder<T>
         _pattern.Elements.Add(new PartOfSpeechPatternElement<T>(PartOfSpeech.PRON));
         return this;
     }
+    
+    public PatternBuilder<T> Verb()
+    {
+        _pattern.Elements.Add(new PartOfSpeechPatternElement<T>(PartOfSpeech.VERB));
+        return this;
+    }
 
     public PatternBuilder<T> Noun()
     {

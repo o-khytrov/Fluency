@@ -42,6 +42,12 @@ public class RuleBuilder<T>
         return this;
     }
 
+    public IRuleBuilderOutputStage<T> Pattern(Func<Conversation<T>, PatternEngine, bool> patternBuilderAction)
+    {
+        _botRule.Condition = patternBuilderAction;
+        return this;
+    }
+
     public IIntermediateStageBuilder<T> When(Func<T, BotInput, bool> condition)
     {
         _botRule.Conditions.Add(condition);
@@ -130,6 +136,8 @@ public interface IRuleBuilderInitialStage<T> : IConditionBuilder<T>
     /// <param name="patternBuilderAction"></param>
     /// <returns></returns>
     IRuleBuilderOutputStage<T> Pattern(Action<PatternBuilder<T>> patternBuilderAction);
+
+    IRuleBuilderOutputStage<T> Pattern(Func<Conversation<T>, PatternEngine, bool> patternBuilderAction);
 }
 
 public interface IRuleBuilderFinalStage<T>

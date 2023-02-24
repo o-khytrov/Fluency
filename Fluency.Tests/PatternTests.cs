@@ -83,11 +83,11 @@ public class PatternTests
     [InlineData("My dog ate chocolate", true)]
     [InlineData("Her cat ate chocolate", true)]
     [InlineData("Our cat ate chocolate", true)]
-    [InlineData("Neighbour's dog ate my cat", false)]
+    [InlineData("Crazy dog ate my cat", false)]
     public void PossessivePronounPatternElementTest(string input, bool match)
     {
         var pattern = new PatternBuilder<ChatContext>()
-            .Pos(PartOfSpeech.PRON).Noun().Pos(PartOfSpeech.VERB).Pos(PartOfSpeech.NOUN)
+            .Pronoun().Noun().Verb().Noun()
             .Build();
 
         var result = Match(pattern, input);
